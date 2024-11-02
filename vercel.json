@@ -1,0 +1,19 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "index.web.js",
+        "use": "@vercel/static-build",
+        "config": {
+          "distDir": "web-build"
+        }
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "/index.web.js"
+      }
+    ]
+  }
+  
