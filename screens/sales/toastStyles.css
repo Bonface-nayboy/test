@@ -1,0 +1,17 @@
+/* toastStyles.css */
+.Toastify {
+    z-index: 9999; /* Ensure the toast appears on top */
+}
+.Toastify__toast {
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 8px;
+    color: #fff;
+    background: #333; /* Change background color if needed */
+}
+.Toastify__toast--success {
+    background: #4caf50; /* Green for success */
+}
+.Toastify__toast--error {
+    background: #f44336; /* Red for error */
+}
