@@ -1,9 +1,8 @@
-
 import React from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import HomeScreen from './components/home/homescreen';
 import Favourites from './components/others/favourites';
 import ItemDetail from './components/others/staticitems';
@@ -29,6 +28,11 @@ import Receipt from './screens/sales/Receipt';
 import CoolScreen from './screens/coolscreen';
 import MainSales from './screens/sales/mainSales';
 import PurchaseReceipt from './screens/purchases/PurchaseReceipt';
+
+// Conditionally import CSS for web
+if (Platform.OS === 'web') {
+  require('react-toastify/dist/ReactToastify.css');
+}
 
 const Stack = createNativeStackNavigator();
 
