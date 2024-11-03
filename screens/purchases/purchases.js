@@ -443,7 +443,7 @@ export default function Purchases() {
             Alert.alert('Purchases have been successfully posted');
 
             // Navigate to Receipt screen and pass purchase data and total price
-            navigation.navigate('PurchaseReceipt', { purchaseData, totalPrice });
+            // navigation.navigate('PurchaseReceipt', { purchaseData, totalPrice });
 
         } catch (error) {
             console.error('Error posting the purchases:', error);

@@ -5,6 +5,7 @@ import { Image, TouchableOpacity, ScrollView, View, StyleSheet, TextInput, Modal
 import { Text, Card, Button } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+
 export default function MainSales() {
     const [items, setItems] = useState([]);
     const [basket, setBasket] = useState({});
@@ -26,7 +27,7 @@ export default function MainSales() {
     const fetchItems = async () => {
         try {
             const userEmail = await AsyncStorage.getItem('userEmail');
-            const response = await fetch(`http://192.168.100.45:8080/api/v1/model?email=${userEmail}`);
+            const response = await fetch(`https://gunners-7544551f4514.herokuapp.com/api/v1/model?email=${userEmail}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -83,7 +84,7 @@ export default function MainSales() {
         try {
             const userEmail = await AsyncStorage.getItem('userEmail');
 
-            const response = await fetch(`http://192.168.100.45:8080/api/v1/sales/bulk?email=${userEmail}`, {
+            const response = await fetch(`https://gunners-7544551f4514.herokuapp.com/api/v1/sales/bulk?email=${userEmail}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -98,11 +99,11 @@ export default function MainSales() {
 
             const result = await response.json();
             console.log('Fetched items:', result);
-            ToastAndroid.show('Sales posted successfully!', ToastAndroid.SHORT);
+           
             setModalVisible(false);
 
             const totalPrice = calculateTotalPrice();
-            navigation.navigate('Receipt', { salesData, totalPrice });
+            // navigation.navigate('Receipt', { salesData, totalPrice });
 
         } catch (error) {
             alert(`Error posting sales: ${error.message}`);
