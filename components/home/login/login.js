@@ -17,61 +17,6 @@ const Login = () => {
         setShowPassword(!showPassword);
     };
 
-
-    // const handleLogin = async () => {
-    //     try {
-    //         const response = await fetch('http://192.168.100.45:8080/api/v1/Login/authenticate', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({ username, password }), 
-    //         });
-    
-    //         // // Check if the response is OK
-    //         // if (!response.ok) {
-    //         //     const error = await response.json();
-    //         //     throw new Error(error.message || 'Login failed');
-    //         // }
-    
-    //         const result = await response.json();
-    //         console.log('Logged in successfully:', result);
-    
-    //         // Check the success flag in the response
-    //         if (result.success) {
-    //             await AsyncStorage.setItem('userCredentials', JSON.stringify(result.user));
-    //             await AsyncStorage.setItem('username', result.user.username);
-    //             await AsyncStorage.setItem('userEmail', result.user.email); // Add this when logging in
-
-
-                
-    //             // Clear fields on successful login
-    //             setUsername('');
-    //             setPassword('');
-    
-    //             Toast.show({
-    //                 type: 'success',
-    //                 text1: 'Login Successfully',
-    //                 text2: `Welcome back, ${result.user.username}! 👋`
-    //             });
-    //             navigation.navigate('CoolScreen'); // Redirect to your main screen
-    //         } else {
-    //             // If login fails
-    //             Toast.show({
-    //                 type: 'error',
-    //                 text1: 'Login Failed',
-    //                 text2: 'Username or password is incorrect!'
-    //             });
-    //         }
-    //     } catch (error) {
-    //         console.error('Error Logging in:', error);
-    //         Toast.show({
-    //             type: 'error',
-    //             text1: 'Login Failed',
-    //             text2: error.message
-    //         });
-    //     }
-    // };
     
 
     const handleLogin = async () => {
@@ -107,25 +52,14 @@ const Login = () => {
                 //     text1: 'Login Successfully',
                 //     text2: `Welcome back, ${username}! 👋`
                 // });
-                Alert('Login successfully!  Welcome back, ${username}! 👋')
-                navigation.navigate('CoolScreen'); // Redirect to your main screen
+                Alert.alert('Login Successful', `Welcome back, ${username}! 👋`);
+                navigation.navigate('CoolScreen');
             } else {
-                // // Handle login failure
-                // Toast.show({
-                //     type: 'error',
-                //     text1: 'Login Failed',
-                //     text2: 'Username or password is incorrect!'
-                // });
-                Alert('Login failed!  Welcome back, ${username}! 👋')
+                Alert.alert('Login Failed', 'Username or password is incorrect!');
             }
         } catch (error) {
             console.error('Error Logging in:', error);
-            // Toast.show({
-            //     type: 'error',
-            //     text1: 'Login Failed',
-            //     text2: error.message
-            // });
-            Alert('error logging in!  Welcome back, ${username}! 👋')
+            Alert.alert('Login Error', error.message);
         }
     };
     

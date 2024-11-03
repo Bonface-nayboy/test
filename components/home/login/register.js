@@ -71,7 +71,7 @@ const Register = () => {
             //     text2: `Welcome, ${username}! 👩‍💼`
             // });
 
-            Alert('Account created successfully');
+            Alert.alert('Account created successfully');
             navigation.navigate('Login');
         } catch (error) {
             console.error('Error in registering the user', error);
@@ -80,7 +80,7 @@ const Register = () => {
             //     text1: 'Failed to create an account!',
             //     text2: 'Poor connection, please try again.'
             // });
-            Alert('Account created successfully');
+            Alert.alert('Account created successfully');
         }
     };
     
