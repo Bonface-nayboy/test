@@ -320,9 +320,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { Image, TouchableOpacity, ScrollView, View, StyleSheet, TextInput, Modal } from 'react-native';
+import { Image, TouchableOpacity, ScrollView, View, StyleSheet, TextInput, Modal, Alert } from 'react-native';
 import { Text, Card, Button } from 'react-native-paper';
-import Toast from 'react-native-toast-message';
+// import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function Purchases() {
@@ -435,11 +435,12 @@ export default function Purchases() {
             setModalVisible(false);
 
             // Show success toast message
-            Toast.show({
-                type: 'success',
-                text1: 'Purchases have been successfully posted',
-                text2: 'Now you can sell the items!',
-            });
+            // Toast.show({
+            //     type: 'success',
+            //     text1: 'Purchases have been successfully posted',
+            //     text2: 'Now you can sell the items!',
+            // });
+            Alert('Purchases have been successfully posted')
 
             // Navigate to Receipt screen and pass purchase data and total price
             navigation.navigate('PurchaseReceipt', { purchaseData, totalPrice });

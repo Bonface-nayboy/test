@@ -323,8 +323,8 @@ import React, { useEffect, useState } from 'react';
 import { Image, TouchableOpacity, ScrollView, View, StyleSheet, TextInput, Modal } from 'react-native';
 import { Text, Card, Button } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
-import 'react-toastify/dist/ReactToastify.css'; // Import toast CSS
+// import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
+// import 'react-toastify/dist/ReactToastify.css'; // Import toast CSS
 
 export default function MainSales() {
     const [items, setItems] = useState([]);
@@ -419,7 +419,7 @@ export default function MainSales() {
 
             const result = await response.json();
             console.log('Fetched items:', result);
-            toast.success('Sales posted successfully!'); // Use react-toastify
+            // toast.success('Sales posted successfully!'); // Use react-toastify
             
             setModalVisible(false);
 
@@ -441,7 +441,7 @@ export default function MainSales() {
 
     return (
         <View style={styles.container}>
-            <ToastContainer /> {/* Add the ToastContainer here */}
+            {/* <ToastContainer /> Add the ToastContainer here */}
             <ScrollView>
                 {items.map((item) => (
                     <Card key={item.id} style={styles.card}>

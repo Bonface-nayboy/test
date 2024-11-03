@@ -1,9 +1,9 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { Alert, Image, StyleSheet, View } from "react-native";
 import { Button, Card, Text, TextInput } from "react-native-paper";
-import Toast from "react-native-toast-message";
+// import Toast from "react-native-toast-message";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Register = () => {
@@ -64,20 +64,22 @@ const Register = () => {
             setUsername('');
             setPassword('');
 
-            Toast.show({
-                type: 'success',
-                text1: 'Account created successfully',
-                text2: `Welcome, ${username}! 👩‍💼`
-            });
+            // Toast.show({
+            //     type: 'success',
+            //     text1: 'Account created successfully',
+            //     text2: `Welcome, ${username}! 👩‍💼`
+            // });
 
+            Alert('Account created successfully');
             navigation.navigate('Login');
         } catch (error) {
             console.error('Error in registering the user', error);
-            Toast.show({
-                type: 'error',
-                text1: 'Failed to create an account!',
-                text2: 'Poor connection, please try again.'
-            });
+            // Toast.show({
+            //     type: 'error',
+            //     text1: 'Failed to create an account!',
+            //     text2: 'Poor connection, please try again.'
+            // });
+            Alert('Account created successfully');
         }
     };
     

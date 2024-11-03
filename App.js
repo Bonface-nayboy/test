@@ -11,7 +11,7 @@ import Register from './components/home/login/register';
 import Login from './components/home/login/login';
 import MainScreen from './screens/MainScreen';
 import ResetPassword from './components/home/login/resetpassword';
-import Toast from 'react-native-toast-message';
+// import Toast from 'react-native-toast-message';
 import Newcode from './components/home/login/Code';
 import Newpass from './components/home/login/newpassword';
 import Gunners from './components/home/login/Gunners';
@@ -29,10 +29,10 @@ import CoolScreen from './screens/coolscreen';
 import MainSales from './screens/sales/mainSales';
 import PurchaseReceipt from './screens/purchases/PurchaseReceipt';
 
-// Conditionally import CSS for web
-if (Platform.OS === 'web') {
-  require('react-toastify/dist/ReactToastify.css');
-}
+// // Conditionally import CSS for web
+// if (Platform.OS === 'web') {
+//   require('react-toastify/dist/ReactToastify.css');
+// }
 
 const Stack = createNativeStackNavigator();
 
@@ -79,7 +79,7 @@ const App = () => {
             <Stack.Screen name='PurchaseReceipt' component={PurchaseReceipt} />
             <Stack.Screen name='CoolScreen' component={CoolScreen} options={{ headerShown: false }} />
           </Stack.Navigator>
-          <Toast />
+          {/* <Toast /> */}
         </NavigationContainer>
       </PaperProvider>
     </ThemeProvider>

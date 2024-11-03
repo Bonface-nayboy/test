@@ -1,8 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import { Button, Text, TextInput } from "react-native-paper";
-import Toast from "react-native-toast-message";
+// import Toast from "react-native-toast-message";
 
 const ResetPassword = () => {
     const [email, setEmail] = useState('bonnay@gmail.com');
@@ -10,20 +10,22 @@ const ResetPassword = () => {
 
     const handleReset = () => {
         if (email === 'bonnay@gmail.com') {
-            Toast.show({
-                type: 'success',
-                text1: 'Password reset has been sent successfully',
-                text2: 'Your request is being processed...'
-            })
+            // Toast.show({
+            //     type: 'success',
+            //     text1: 'Password reset has been sent successfully',
+            //     text2: 'Your request is being processed...'
+            // })
+            Alert('Password reset has been sent successfully')
             navigation.navigate('Code')
 
         }
         else {
-            Toast.show({
-                type: 'error',
-                text1: 'Invalid Email',
-                text2: 'Failed to send the request'
-            })
+            // Toast.show({
+            //     type: 'error',
+            //     text1: 'Invalid Email',
+            //     text2: 'Failed to send the request'
+            // })
+            Alert('Invalid Email')
         }
     }
 

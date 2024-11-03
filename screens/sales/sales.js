@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, Alert, Modal, TextInput, StyleSheet } from 'react-native';
 import { Button, Card } from 'react-native-paper';
-import Toast from 'react-native-toast-message';
+// import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Sales = ({ route, navigation }) => {
@@ -85,10 +85,10 @@ const Sales = ({ route, navigation }) => {
   // If successful
   const result = await response.json();
   console.log('Fetched items:', result);
-  Toast.show({
-    type: 'success',
-    text1: 'Sales posted successfully!',
-  });
+  // Toast.show({
+  //   type: 'success',
+  //   text1: 'Sales posted successfully!',
+  // });
   setModalVisible(false);
   const totalPrice = calculateTotalPrice(); 
 

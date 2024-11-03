@@ -11,11 +11,13 @@ module.exports = async function (env, argv) {
   config.entry = './App.js';
 
   // Set output configuration
+  
   config.output = {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].[contenthash].js',
+    filename: '[name].[contenthash].js', // Ensure contenthash usage
     clean: true,
   };
+  
 
   // Include the fallback for Node.js modules
   config.resolve.fallback = {

@@ -3,7 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Image, TouchableOpacity, StyleSheet, View, Alert } from "react-native";
 import { Avatar, Button, Card, Text, TextInput } from "react-native-paper";
-import Toast from "react-native-toast-message";
+// import Toast from "react-native-toast-message";
 import Icon from "react-native-vector-icons/FontAwesome";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -102,27 +102,30 @@ const Login = () => {
                 setUsername('');
                 setPassword('');
     
-                Toast.show({
-                    type: 'success',
-                    text1: 'Login Successfully',
-                    text2: `Welcome back, ${username}! 👋`
-                });
+                // Toast.show({
+                //     type: 'success',
+                //     text1: 'Login Successfully',
+                //     text2: `Welcome back, ${username}! 👋`
+                // });
+                Alert('Login successfully!  Welcome back, ${username}! 👋')
                 navigation.navigate('CoolScreen'); // Redirect to your main screen
             } else {
-                // Handle login failure
-                Toast.show({
-                    type: 'error',
-                    text1: 'Login Failed',
-                    text2: 'Username or password is incorrect!'
-                });
+                // // Handle login failure
+                // Toast.show({
+                //     type: 'error',
+                //     text1: 'Login Failed',
+                //     text2: 'Username or password is incorrect!'
+                // });
+                Alert('Login failed!  Welcome back, ${username}! 👋')
             }
         } catch (error) {
             console.error('Error Logging in:', error);
-            Toast.show({
-                type: 'error',
-                text1: 'Login Failed',
-                text2: error.message
-            });
+            // Toast.show({
+            //     type: 'error',
+            //     text1: 'Login Failed',
+            //     text2: error.message
+            // });
+            Alert('error logging in!  Welcome back, ${username}! 👋')
         }
     };
     

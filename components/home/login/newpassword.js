@@ -1,9 +1,9 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import { Button, Card, Text, TextInput } from "react-native-paper";
-import Toast from "react-native-toast-message";
+// import Toast from "react-native-toast-message";
 
 const Newpass = () => {
     const navigation = useNavigation();
@@ -22,19 +22,21 @@ const Newpass = () => {
 
     const handlesubmitNewPassword = () => {
         if (confirmPassword === password) {
-            Toast.show({
-                type: 'success',
-                text1: 'Password reset submitted successfully',
-                text2: 'please wait,Your request is being proceessed...'
-            })
+            // Toast.show({
+            //     type: 'success',
+            //     text1: 'Password reset submitted successfully',
+            //     text2: 'please wait,Your request is being proceessed...'
+            // })
+            Alert('invalid credentials')
             navigation.navigate('Login')
         }
         else {
-            Toast.show({
-                type: 'error',
-                text1: 'Invalid credentials',
-                text2: 'Your Password do not match'
-            })
+            // Toast.show({
+            //     type: 'error',
+            //     text1: 'Invalid credentials',
+            //     text2: 'Your Password do not match'
+            // })
+            Alert('invalid credentials')
         }
     }
 

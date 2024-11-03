@@ -1,8 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import { Button, Text, TextInput } from "react-native-paper";
-import Toast from "react-native-toast-message";
+// import Toast from "react-native-toast-message";
 
 const Newcode = () => {
     const navigation = useNavigation();
@@ -10,19 +10,21 @@ const Newcode = () => {
 
     const handleCodesubmit = () => {
         if (code === 'F90Ye5') {
-            Toast.show({
-                type: 'success',
-                text1: 'Code submited successfully',
-                text2: 'Your request is being proceessed...'
-            })
+            // Toast.show({
+            //     type: 'success',
+            //     text1: 'Code submited successfully',
+            //     text2: 'Your request is being proceessed...'
+            // })
+            Alert('Code submited successfully');
             navigation.navigate('newpassword')
         }
         else {
-            Toast.show({
-                type: 'error',
-                text1: 'Invalid Code',
-                text2: 'The code has expired'
-            })
+            // Toast.show({
+            //     type: 'error',
+            //     text1: 'Invalid Code',
+            //     text2: 'The code has expired'
+            // })
+            Alert('Invalid Code');
         }
 
     }
