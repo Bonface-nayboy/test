@@ -49,20 +49,18 @@ module.exports = async function (env, argv) {
       },
     ],
   });
-
-  // Add rules for handling fonts and images
   config.module.rules.push({
-    test: /\.(woff|woff2|eot|ttf|otf|png|jpe?g|gif|svg)$/,
+    test: /\.(png|jpe?g|gif|svg|ico|eot|ttf|woff|woff2|pdf)$/,
     use: [
-      {
-        loader: 'file-loader',
-        options: {
-          name: '[path][name].[ext]',
-          outputPath: 'assets/',
+        {
+            loader: 'file-loader',
+            options: {
+                name: '[path][name].[ext]', // Customize output file naming as needed
+                outputPath: 'assets/', // Output directory for assets
+            },
         },
-      },
     ],
-  });
+});
 
   // Set performance hints
   config.performance = {
@@ -71,8 +69,16 @@ module.exports = async function (env, argv) {
     maxEntrypointSize: 1024 * 1024, // 1 MB
   };
 
+  config.performance = {
+    hints: 'warning',
+    maxEntrypointSize: 2000000, // Increase the limit to 2 MiB
+    maxAssetSize: 2000000, // Increase the limit to 2 MiB
+  };
+  
+
   // Add the CleanWebpackPlugin
   config.plugins.push(new CleanWebpackPlugin());
 
   return config;
 };
+
