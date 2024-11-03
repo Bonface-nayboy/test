@@ -11,7 +11,7 @@ module.exports = async function (env, argv) {
   // Set output configuration
   config.output = {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].[contenthash].js', // Ensure contenthash usage
+    filename: '[name].[contenthash].js', // Ensure unique chunk names using contenthash
     clean: true,
   };
 
@@ -49,36 +49,30 @@ module.exports = async function (env, argv) {
       },
     ],
   });
+
+  // Add a rule for handling asset files
   config.module.rules.push({
     test: /\.(png|jpe?g|gif|svg|ico|eot|ttf|woff|woff2|pdf)$/,
     use: [
-        {
-            loader: 'file-loader',
-            options: {
-                name: '[path][name].[ext]', // Customize output file naming as needed
-                outputPath: 'assets/', // Output directory for assets
-            },
+      {
+        loader: 'file-loader',
+        options: {
+          name: '[path][name].[ext]', // Customize output file naming as needed
+          outputPath: 'assets/', // Output directory for assets
         },
+      },
     ],
-});
+  });
 
-  // Set performance hints
+  // Set performance hints and limits
   config.performance = {
     hints: 'warning',
-    maxAssetSize: 1024 * 1024, // 1 MB
-    maxEntrypointSize: 1024 * 1024, // 1 MB
+    maxAssetSize: 2 * 1024 * 1024, // Increase the limit to 2 MiB
+    maxEntrypointSize: 2 * 1024 * 1024, // Increase the limit to 2 MiB
   };
 
-  config.performance = {
-    hints: 'warning',
-    maxEntrypointSize: 2000000, // Increase the limit to 2 MiB
-    maxAssetSize: 2000000, // Increase the limit to 2 MiB
-  };
-  
-
-  // Add the CleanWebpackPlugin
+  // Add the CleanWebpackPlugin to clean the output directory before each build
   config.plugins.push(new CleanWebpackPlugin());
 
   return config;
 };
-
