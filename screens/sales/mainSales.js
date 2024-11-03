@@ -105,6 +105,8 @@ export default function MainSales() {
             const totalPrice = calculateTotalPrice();
             // navigation.navigate('Receipt', { salesData, totalPrice });
 
+             Alert.alert('Sales Posted successfully !')
+              navigation.navigate('Items');
         } catch (error) {
             alert(`Error posting sales: ${error.message}`);
             console.error('Error posting sale:', error);
