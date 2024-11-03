@@ -440,7 +440,7 @@ export default function Purchases() {
             //     text1: 'Purchases have been successfully posted',
             //     text2: 'Now you can sell the items!',
             // });
-            Alert('Purchases have been successfully posted')
+            Alert.alert('Purchases have been successfully posted');
 
             // Navigate to Receipt screen and pass purchase data and total price
             navigation.navigate('PurchaseReceipt', { purchaseData, totalPrice });

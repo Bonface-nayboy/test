@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { Button, Card } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -27,7 +27,7 @@ const CartScreen = ({ route, navigation }) => {
   };
 
   const handleCheckout = () => {
-    alert('Proceeding to checkout');
+    Alert.alert('Proceeding to checkout');
     // Clear items from the cart after checkout
     setItems([]);  // Clear the cart items
     navigation.navigate('Items'); // Navigate to the home or previous screen
