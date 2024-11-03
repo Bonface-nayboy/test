@@ -56,7 +56,7 @@ const Sales = ({ route, navigation }) => {
 
   const handlePostSales = async () => {
     if (items.length === 0) {
-      alert('No items to post!');
+      Alert.alert('No items to post!');
       return;
     }
 
@@ -96,7 +96,7 @@ const Sales = ({ route, navigation }) => {
   console.log('salesdata :', salesData);
 
 } catch (error) {
-  alert(`Error posting sales: ${error.message}`);
+  Alert.alert(`Error posting sales: ${error.message}`);
   console.error('error posting sale',error)
 }
 

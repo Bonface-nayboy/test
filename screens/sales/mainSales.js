@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { Image, TouchableOpacity, ScrollView, View, StyleSheet, TextInput, Modal} from 'react-native';
+import { Image, TouchableOpacity, ScrollView, View, StyleSheet, TextInput, Modal, Alert} from 'react-native';
 import { Text, Card, Button } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -69,15 +69,19 @@ export default function MainSales() {
             }));
 
         if (selectedItems.length === 0) {
-            alert("Please select at least one item to sell.");
+            Alert.alert("Please select at least one item to sell.");
             return;
         }
 
         const salesData = selectedItems.map(item => ({
-            ...item,
+            productId: item.productId,
+            productName: item.productName,
+            quantity: item.quantity,
+            price: item.price,
             paymentMethod: selectedPaymentMethod,
             mobileNumber: selectedPaymentMethod === 'mpesa' ? mobileNumber : '',
         }));
+        
 
         console.log("Sales Data:", JSON.stringify(salesData, null, 2));
 
@@ -108,7 +112,7 @@ export default function MainSales() {
              Alert.alert('Sales Posted successfully !')
               navigation.navigate('Items');
         } catch (error) {
-            alert(`Error posting sales: ${error.message}`);
+            Alert.alert(`Error posting sales: ${error.message}`);
             console.error('Error posting sale:', error);
         }
     };
