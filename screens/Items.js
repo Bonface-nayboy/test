@@ -30,7 +30,7 @@ const Items = () => {
         setLoading(true);
         try {
             const userEmail = await AsyncStorage.getItem('userEmail');
-          const response = await fetch(`http://192.168.100.45:8080/api/v1/model?email=${userEmail}`);
+          const response = await fetch(`https://gunners-7544551f4514.herokuapp.com/api/v1/model?email=${userEmail}`);
 
             if (!response.ok) {
                 throw new Error(`Could not fetch categories. Status: ${response.status}`);
@@ -52,7 +52,7 @@ const Items = () => {
             const userEmail = await AsyncStorage.getItem('userEmail');
             console.log('User Email fetched from storage:', userEmail);
 
-            const response = await fetch(`http://192.168.100.45:8080/api/v1/model?email=${userEmail}`);
+            const response = await fetch(`https://gunners-7544551f4514.herokuapp.com/api/v1/model?email=${userEmail}`);
 
             if (!response.ok) {
                 const errorText = await response.text();
@@ -76,7 +76,7 @@ const Items = () => {
     const fetchFeaturedItems = async () => {
         if (selectedItem) {
             try {
-                const response = await fetch(`http://192.168.100.45:8080/api/v1/featured-items/${selectedItem.id}`);
+                const response = await fetch(`https://gunners-7544551f4514.herokuapp.com/api/v1/featured-items/${selectedItem.id}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }

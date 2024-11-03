@@ -32,7 +32,7 @@ const CreateProduct = () => {
     };
 
     try {
-      const response = await fetch(`http://192.168.100.45:8080/api/v1/model?email=${encodeURIComponent(userEmail)}`, {
+      const response = await fetch(`https://gunners-7544551f4514.herokuapp.com/api/v1/model?email=${encodeURIComponent(userEmail)}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,33 +1,34 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import HomeScreen from './components/home/homescreen';
 import Favourites from './components/others/favourites';
-import ItemDetail from './components/others/staticitems';
-import CartScreen from './components/others/CartScreen';
-import Register from './components/home/login/register';
-import Login from './components/home/login/login';
-import MainScreen from './screens/MainScreen';
-import ResetPassword from './components/home/login/resetpassword';
-import Newcode from './components/home/login/Code';
-import Newpass from './components/home/login/newpassword';
-import Gunners from './components/home/login/Gunners';
-import Homepage from './screens/homepage';
-import Mainmenu from './components/others/menu';
 import { ThemeProvider } from './components/others/theme';
-import Profile from './components/home/Profile';
-import Products from './components/others/products';
-import CreateProduct from './components/others/productsCreated';
-import Items from './screens/Items';
-import Sales from './screens/sales/sales';
-import Purchases from './screens/purchases/purchases';
-import Receipt from './screens/sales/Receipt';
-import CoolScreen from './screens/coolscreen';
-import MainSales from './screens/sales/mainSales';
-import PurchaseReceipt from './screens/purchases/PurchaseReceipt';
 
+// Lazy load screens
+const ItemDetail = lazy(() => import('./components/others/staticitems'));
+const CartScreen = lazy(() => import('./components/others/CartScreen'));
+const Register = lazy(() => import('./components/home/login/register'));
+const Login = lazy(() => import('./components/home/login/login'));
+const MainScreen = lazy(() => import('./screens/MainScreen'));
+const ResetPassword = lazy(() => import('./components/home/login/resetpassword'));
+const Newcode = lazy(() => import('./components/home/login/Code'));
+const Newpass = lazy(() => import('./components/home/login/newpassword'));
+const Gunners = lazy(() => import('./components/home/login/Gunners'));
+const Homepage = lazy(() => import('./screens/homepage'));
+const Mainmenu = lazy(() => import('./components/others/menu'));
+const Profile = lazy(() => import('./components/home/Profile'));
+const Products = lazy(() => import('./components/others/products'));
+const CreateProduct = lazy(() => import('./components/others/productsCreated'));
+const Items = lazy(() => import('./screens/Items'));
+const Sales = lazy(() => import('./screens/sales/sales'));
+const Purchases = lazy(() => import('./screens/purchases/purchases'));
+const Receipt = lazy(() => import('./screens/sales/Receipt'));
+const CoolScreen = lazy(() => import('./screens/coolscreen'));
+const MainSales = lazy(() => import('./screens/sales/mainSales'));
+const PurchaseReceipt = lazy(() => import('./screens/purchases/PurchaseReceipt'));
 
 const Stack = createNativeStackNavigator();
 
@@ -53,28 +54,147 @@ const App = () => {
             <Stack.Screen name="Main" component={MainScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Favourites" component={Favourites} />
-            <Stack.Screen name="Detail" component={ItemDetail} />
-            <Stack.Screen name="Cart" component={CartScreen} />
-            <Stack.Screen name="Mainmenu" component={Mainmenu} />
-            <Stack.Screen name="Register" component={Register} />
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="ResetPassword" component={ResetPassword} />
-            <Stack.Screen name="Code" component={Newcode} />
-            <Stack.Screen name="newpassword" component={Newpass} />
-            <Stack.Screen name="Gunners" component={Gunners} options={{ headerShown: false }} />
-            <Stack.Screen name="homepage" component={Homepage} options={{ headerShown: false }} />
-            <Stack.Screen name="Profile" component={Profile} />
-            <Stack.Screen name="Products" component={Products} />
-            <Stack.Screen name="CreateProduct" component={CreateProduct} />
-            <Stack.Screen name="Items" component={Items} options={{ headerShown: false }} />
-            <Stack.Screen name='Sales' component={Sales} />
-            <Stack.Screen name='MainSales' component={MainSales} />
-            <Stack.Screen name='Purchases' component={Purchases} />
-            <Stack.Screen name="Receipt" component={Receipt} />
-            <Stack.Screen name='PurchaseReceipt' component={PurchaseReceipt} />
-            <Stack.Screen name='CoolScreen' component={CoolScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Detail">
+              {() => (
+                <Suspense fallback={<Text>Loading...</Text>}>
+                  <ItemDetail />
+                </Suspense>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Cart">
+              {() => (
+                <Suspense fallback={<Text>Loading...</Text>}>
+                  <CartScreen />
+                </Suspense>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Mainmenu">
+              {() => (
+                <Suspense fallback={<Text>Loading...</Text>}>
+                  <Mainmenu />
+                </Suspense>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Register">
+              {() => (
+                <Suspense fallback={<Text>Loading...</Text>}>
+                  <Register />
+                </Suspense>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Login">
+              {() => (
+                <Suspense fallback={<Text>Loading...</Text>}>
+                  <Login />
+                </Suspense>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="ResetPassword">
+              {() => (
+                <Suspense fallback={<Text>Loading...</Text>}>
+                  <ResetPassword />
+                </Suspense>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Code">
+              {() => (
+                <Suspense fallback={<Text>Loading...</Text>}>
+                  <Newcode />
+                </Suspense>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="newpassword">
+              {() => (
+                <Suspense fallback={<Text>Loading...</Text>}>
+                  <Newpass />
+                </Suspense>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Gunners" options={{ headerShown: false }}>
+              {() => (
+                <Suspense fallback={<Text>Loading...</Text>}>
+                  <Gunners />
+                </Suspense>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="homepage" options={{ headerShown: false }}>
+              {() => (
+                <Suspense fallback={<Text>Loading...</Text>}>
+                  <Homepage />
+                </Suspense>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Profile">
+              {() => (
+                <Suspense fallback={<Text>Loading...</Text>}>
+                  <Profile />
+                </Suspense>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Products">
+              {() => (
+                <Suspense fallback={<Text>Loading...</Text>}>
+                  <Products />
+                </Suspense>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="CreateProduct">
+              {() => (
+                <Suspense fallback={<Text>Loading...</Text>}>
+                  <CreateProduct />
+                </Suspense>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Items" options={{ headerShown: false }}>
+              {() => (
+                <Suspense fallback={<Text>Loading...</Text>}>
+                  <Items />
+                </Suspense>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Sales">
+              {() => (
+                <Suspense fallback={<Text>Loading...</Text>}>
+                  <Sales />
+                </Suspense>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="MainSales">
+              {() => (
+                <Suspense fallback={<Text>Loading...</Text>}>
+                  <MainSales />
+                </Suspense>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Purchases">
+              {() => (
+                <Suspense fallback={<Text>Loading...</Text>}>
+                  <Purchases />
+                </Suspense>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Receipt">
+              {() => (
+                <Suspense fallback={<Text>Loading...</Text>}>
+                  <Receipt />
+                </Suspense>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="PurchaseReceipt">
+              {() => (
+                <Suspense fallback={<Text>Loading...</Text>}>
+                  <PurchaseReceipt />
+                </Suspense>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="CoolScreen" options={{ headerShown: false }}>
+              {() => (
+                <Suspense fallback={<Text>Loading...</Text>}>
+                  <CoolScreen />
+                </Suspense>
+              )}
+            </Stack.Screen>
           </Stack.Navigator>
-
         </NavigationContainer>
       </PaperProvider>
     </ThemeProvider>
