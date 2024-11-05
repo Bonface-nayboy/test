@@ -5,7 +5,6 @@ import { ScrollView, StatusBar, StyleSheet, View, Image, TouchableOpacity, Refre
 import { Button, Text, ActivityIndicator, Card, Appbar, TextInput, Modal } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-
 const Items = () => {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -23,14 +22,16 @@ const Items = () => {
     const [showItems, setShowItems] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const navigation = useNavigation();
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalItems, setModalItems] = useState([]);
     const route = useRoute();
-
 
     const fetchCategories = async () => {
         setLoading(true);
         try {
             const userEmail = await AsyncStorage.getItem('userEmail');
-          const response = await fetch(`https://gunners-7544551f4514.herokuapp.com/api/v1/model?email=${userEmail}`);
+            const response = await fetch(`https://gunners-7544551f4514.herokuapp.com/api/v1/model?email=${userEmail}`);
 
             if (!response.ok) {
                 throw new Error(`Could not fetch categories. Status: ${response.status}`);
@@ -45,7 +46,6 @@ const Items = () => {
     };
 
 
-
     const fetchItems = async () => {
         setLoading(true);
         try {
@@ -56,22 +56,18 @@ const Items = () => {
 
             if (!response.ok) {
                 const errorText = await response.text();
-                console.error('Error fetching products:', errorText); // Improved error logging
+                console.error('Error fetching products:', errorText);
                 throw new Error(`Could not fetch items. Status: ${response.status}, Message: ${errorText}`);
             }
 
             const result = await response.json();
             setItems(result);
-            // console.log('Fetched items:', result); // Log the fetched items
-
         } catch (error) {
             console.error('Error fetching your products:', error.message);
         } finally {
             setLoading(false);
         }
     };
-
-
 
     const fetchFeaturedItems = async () => {
         if (selectedItem) {
@@ -90,15 +86,14 @@ const Items = () => {
 
     const fetchUsername = async () => {
         try {
-            const storedUsername = await AsyncStorage.getItem('username'); // Fetch username
+            const storedUsername = await AsyncStorage.getItem('username');
             if (storedUsername) {
-                setUsername(storedUsername); // Set the username in state
+                setUsername(storedUsername);
             }
         } catch (error) {
             console.error('Error fetching username:', error);
         }
     };
-
 
     useEffect(() => {
         fetchCategories();
@@ -114,7 +109,6 @@ const Items = () => {
             acc[item.category]++;
             return acc;
         }, {});
-
         return Object.entries(categoryCount).map(([category, count]) => ({
             name: category,
             menuCount: count,
@@ -135,10 +129,7 @@ const Items = () => {
         try {
             await fetchCategories();
             await fetchItems();
-
-
             await new Promise(resolve => setTimeout(resolve, 1000));
-
             console.log('Data fetched successfully');
         } catch (error) {
             console.error('Error refreshing data:', error);
@@ -147,7 +138,6 @@ const Items = () => {
             console.log('Refresh ended');
         }
     };
-
 
     useEffect(() => {
         fetchFeaturedItems();
@@ -164,120 +154,43 @@ const Items = () => {
         return unsubscribe;
     }, [navigation, route.params]);
 
+    const handleItemSelect = (item) => {
+        setSelectedItem(item);
+    };
+
+
+
+    useEffect(() => {
+        console.log("Current selectedCategory: ", selectedCategory);
+    }, [selectedCategory]);
+
+    const filteredItem = selectedCategory
+        ? items.filter(item => item.category === selectedCategory)
+        : items;
+
+
+    const handleCategorySelect = async (category) => {
+        setSelectedCategory(category.name);
+        console.log("Selected category: ", category.name);
+        // Fetch items for this category; assuming each item has a 'category' property
+        const itemsForCategory = items.filter(item => item.category === category.name);
+        setModalItems(itemsForCategory);
+        setModalVisible(true); // Show the modal
+    };
+
+    const closeModal = () => {
+        setModalVisible(false);
+        setModalItems([]); // Clear modal items when closing
+        setSelectedCategory(null); // Optionally reset selected category
+    };
 
     if (loading) {
         return <ActivityIndicator size='small' color="green" />;
     }
 
-
-
-
-
     const filteredItems = items.filter(item =>
         item.product_name.toLowerCase().includes(searchText.toLowerCase())
     );
-
-    const handleAddToCart = (item) => {
-        const cartItem = {
-            image: item.product_image,
-            name: item.product_name,
-            price: item.product_price,
-            quantity: 1,
-            stock: item.stock
-        };
-        setCartItems(prevItems => [...prevItems, cartItem]);
-    };
-
-    const handleCartButtonPress = () => {
-        navigation.navigate('Cart', { cartItems });
-        setShowItems(false);
-    };
-
-    const getCartItemCount = () => {
-        return cartItems.reduce((total, item) => total + item.quantity, 0);
-    };
-
-    const handleHeartPress = (index) => {
-        const newHeartStates = [...heartStates];
-        newHeartStates[index] = !newHeartStates[index];
-        setHeartStates(newHeartStates);
-    };
-
-    const handleItemSelect = async (item) => {
-        setLoading(true);
-        setSelectedItem(item);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        setLoading(false);
-    };
-
-    const openModal = (item) => {
-        setSelectedItem(item);
-        setVisible(true);
-    };
-
-    const closeModal = () => {
-        setVisible(false);
-        setSelectedItem(null);
-    };
-
-    const increaseQuantity = () => {
-        setQuantity(quantity + 1);
-    };
-
-    const decreaseQuantity = () => {
-        if (quantity > 1) {
-            setQuantity(quantity - 1);
-        }
-    };
-
-    const handleAddToSale = (item) => {
-        if (item.stock >= quantity) {
-            const basketItem = {
-                productId: item.productId,
-                image: item.product_image,
-                name: item.product_name,
-                price: item.product_price,
-                quantity: quantity,
-                stock: item.stock - quantity
-            };
-
-            setBasketItems(prevItems => [...prevItems, basketItem]);
-            setSaleCount(saleCount + quantity);
-            closeModal();
-        } else {
-            alert('Not enough stock available!');
-        }
-    };
-
-
-    const handleSalesButtonPress = () => {
-        setBasketItems([]);
-        navigation.navigate('Sales', { basketItems });
-        setShowItems(false);
-    };
-
-
-    const getBasketItemCount = () => {
-        return basketItems.reduce((total, item) => total + item.quantity, 0);
-    };
-
-    const handleInputChange = (value) => {
-        // Allow empty input
-        if (value === '') {
-            setQuantity(0);
-            return;
-        }
-
-
-        const numValue = parseInt(value, 10);
-
-
-        if (!isNaN(numValue) && numValue > 0) {
-            setQuantity(numValue);
-        }
-    };
-
-
     return (
         <View style={{ flex: 1 }}>
             <ScrollView
@@ -296,74 +209,31 @@ const Items = () => {
                     <Appbar.Action icon="menu" onPress={() => navigation.navigate('Mainmenu')} color="black" />
                 </Appbar.Header>
                 <StatusBar style="auto" />
-
-
-
-                <View style={styles.searchContainer}>
-                    <TextInput
-                        value={searchText}
-                        onChangeText={setSearchText}
-                        placeholder="Search beverages and foods"
-                        placeholderTextColor='#aaa'
-                        style={styles.searchInput}
-                    />
+                <View style={styles.searchBarContainer}>
+                    <View style={styles.searchContainer}>
+                        <TextInput
+                            value={searchText}
+                            onChangeText={setSearchText}
+                            placeholder="Search your products ..."
+                            placeholderTextColor='#aaa'
+                            style={styles.searchInput}
+                        />
+                    </View>
                 </View>
-
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    {filteredItems.map(item => (
-                        <View key={item.id}>
-                            <Card style={styles.horizontalItemContainer}>
-                                <TouchableOpacity onPress={() => handleItemSelect(item)}>
-                                    {item.product_image && (
-                                        <Image
-                                            source={{ uri: item.product_image }}
-                                            style={styles.horizontalImage}
-                                        />
-                                    )}
-                                    <Text style={styles.horizontalItemName}>{item.product_name}</Text>
-                                    <Text style={styles.horizontalItemPrice}>{item.product_price}</Text>
-                                    <View style={styles.buttonWrapper}>
-                                        <Button onPress={() => handleAddToCart(item)} style={styles.cartButton}>
-                                            <Icon name='cart-plus' size={24} color='white' />
-                                        </Button>
-
-                                        <View style={{ position: 'relative' }}>
-                                            <Button onPress={() => openModal(item)} style={{ padding: 0 }}>
-                                                <View style={styles.stockBadge}>
-                                                    <Text style={styles.stockText}>{item.stock}</Text>
-                                                </View>
-                                            </Button>
-                                        </View>
-
-                                        <View style={{ flex: 1 }}>
-                                            <Button onPress={() => openModal(item)} style={styles.basketButton}>
-                                                <Icon name='shopping-basket' size={24} color='black' />
-                                                {basketItems.length > 0 && (
-                                                    <View style={styles.basketBadge}>
-
-                                                    </View>
-                                                )}
-                                            </Button>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
-                            </Card>
-                        </View>
-                    ))}
-                </ScrollView>
-
-                <Text style={styles.categoryTitle}>Categories</Text>
+                <Text style={styles.featuredTitle}>Categories</Text>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoryScroll}>
                     <View style={styles.categoryContainer}>
                         {Array.isArray(categories) && categories.length > 0 ? (
                             categories.map((category, index) => (
                                 <View key={index} style={styles.categoryItem}>
-                                    <Card style={styles.categoryCard}>
-                                        <View style={styles.categoryContent}>
-                                            <Text style={styles.categoryName}>{category.name}</Text>
-                                            <Text style={styles.categoryCount}>{category.menuCount} MENUS</Text>
-                                        </View>
-                                    </Card>
+                                    <TouchableOpacity onPress={() => handleCategorySelect(category)}>
+                                        <Card style={styles.categoryCard}>
+                                            <View style={styles.categoryContent}>
+                                                <Text style={styles.categoryName}>{category.name}</Text>
+                                                <Text style={styles.categoryCount}>{category.menuCount} Menus</Text>
+                                            </View>
+                                        </Card>
+                                    </TouchableOpacity>
                                 </View>
                             ))
                         ) : (
@@ -372,9 +242,11 @@ const Items = () => {
                     </View>
                 </ScrollView>
 
+
+
                 <View style={styles.featuredTitleContainer}>
-                    <Text style={styles.featuredTitle}>Featured Beverages</Text>
-                    <Text style={styles.menuCount}>40 MENUS</Text>
+                    <Text style={styles.featuredTitle}>Products</Text>
+
                 </View>
 
                 {/* Vertical Scrollable View for Items */}
@@ -391,114 +263,79 @@ const Items = () => {
                                     )}
                                     <View style={styles.verticalItemTextContainer}>
                                         <Text style={styles.verticalItemName}>{item.product_name}</Text>
-                                        <Text style={styles.verticalItemPrice}>{item.product_price}</Text>
+                                        <Text style={styles.verticalItemPrice}>Ksh {item.product_price}</Text>
                                         <View style={styles.verticalItemButtons}>
-                                            <Button onPress={() => handleAddToCart(item)} style={styles.cartButton}>
-                                                <Icon name='cart-plus' size={24} color='red' />
-                                            </Button>
-
-                                            <View style={{ position: 'relative' }}>
-                                                <Button onPress={() => openModal(item)} style={{ padding: 0 }}>
-                                                    <View style={styles.stockBadgeVertical}>
-                                                        <Text style={styles.stockText}>{item.stock}</Text>
-                                                    </View>
-                                                </Button>
+                                            <View style={styles.stockBadgeVertical}>
+                                                <Text style={styles.stockText}>{item.stock}</Text>
                                             </View>
 
-                                            <View style={{ flex: 0 }}>
-                                                <View style={{ position: 'relative' }}>
-                                                    <TouchableOpacity onPress={() => openModal(item)}>
-                                                        <Icon name='shopping-basket' size={20} color='black' />
-                                                    </TouchableOpacity>
-                                                </View>
-                                            </View>
                                         </View>
                                     </View>
-
-
-
-                                    {/* <TouchableOpacity onPress={() => handleHeartPress(index)}>
-                                        <Icon
-                                            name='heart'
-                                            color={heartStates[index] ? 'red' : 'green'}
-                                            size={24}
-                                            style={{ marginLeft: 10 }}
-                                        />
-                                    </TouchableOpacity> */}
-
                                 </View>
                             </TouchableOpacity>
                         </Card>
                     </View>
-                ))}
+                ))
+                }
+            </ScrollView >
 
-
-            </ScrollView>
-
-            <Modal visible={visible} onDismiss={closeModal} contentContainerStyle={styles.modalContainer}>
-                <View style={styles.modalContent}>
-                    <View style={styles.modalHeader}>
-                        <Text style={styles.modalTitle}>Sale with us!</Text>
-                        <Icon name="close" size={24} onPress={closeModal} style={styles.closeButton} />
-                    </View>
-                    <Card style={styles.modalItemContainer}>
-                        <View style={styles.modalItemContent}>
-                            {selectedItem?.product_image && (
-                                <Image
-                                    source={{ uri: selectedItem.product_image }}
-                                    style={styles.modalImage}
-                                />
+            <Modal
+                visible={modalVisible}
+                animationType="slide"
+                transparent={true}
+                onRequestClose={closeModal}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>Items in {selectedCategory}</Text>
+                        <ScrollView>
+                            {/* Mapping through modalItems */}
+                            {modalItems.length > 0 ? (
+                                modalItems.map((item) => (
+                                    <View key={item.id} style={styles.modalItem}>
+                                        <Text style={styles.modalItemName}>{item.product_name}</Text>
+                                        <Text style={styles.modalItemPrice}>Ksh {item.product_price}</Text>
+                                        {/* Add other item details or functionality */}
+                                    </View>
+                                ))
+                            ) : (
+                                <Text>No items found in this category.</Text>
                             )}
-                            <View style={styles.modalItemTextContainer}>
-                                <Text style={styles.modalTitle}>{selectedItem?.product_name}</Text>
-                                <Text style={styles.modalPrice}>
-                                    <Text style={{ color: 'black' }}>Ksh </Text>
-                                    {selectedItem?.product_price}
-                                </Text>
-                            </View>
+                        </ScrollView>
+                        <View style={{
+                            alignContent: 'center',
+                            justifyContent: 'center'
+                        }} >
+                            <Button mode="contained" onPress={closeModal} style={styles.closeModalButton}>
+                                Close
+                            </Button>
                         </View>
-                    </Card>
-                    <View style={styles.quantityContainer}>
-                        <Button onPress={decreaseQuantity} style={styles.quantityButton} mode="contained">-</Button>
-                        <TextInput
-                            value={String(quantity)}
-                            keyboardType="numeric"
-                            onChangeText={handleInputChange}
-                            style={styles.quantityInput}
-                        />
-                        <Button onPress={increaseQuantity} style={styles.quantityButton} mode="contained">+</Button>
-                    </View>
-                    <View style={styles.addButtonContainer}>
-                        <Button onPress={() => handleAddToSale(selectedItem)}>Add to Sale</Button>
                     </View>
                 </View>
             </Modal>
 
+
             <View>
                 <View style={styles.footerContainer}>
                     <View style={styles.footerButton}>
-                        <TouchableOpacity onPress={handleSalesButtonPress}>
+                        <TouchableOpacity onPress={() => navigation.navigate('MainSales')}>
                             <Icon name='shopping-basket' size={24} color='white' style={styles.footerIcon} />
-                            {getBasketItemCount() > 0 && (
-                                <Text style={styles.footerBadge}>{getBasketItemCount()}</Text>
-                            )}
+
                         </TouchableOpacity>
                     </View>
 
                     <View style={styles.footerButton}>
-                        <TouchableOpacity onPress={() => handleHeartPress(1)}>
+                        <TouchableOpacity onPress={() => navigation.navigate('CoolScreen')}>
                             <Icon name='heart' size={24} color='white' style={styles.footerIcon} />
                         </TouchableOpacity>
                     </View>
 
                     <View style={styles.footerButton}>
-                        <TouchableOpacity onPress={handleCartButtonPress}>
-                            <View style={styles.cartButtonContainer}>
-                                <Icon name='shopping-cart' size={24} color='white' style={styles.footerIcon} />
-                                {getCartItemCount() > 0 && (
-                                    <Text style={styles.footerBadge}>{getCartItemCount()}</Text>
-                                )}
-                            </View>
+                        {/* <TouchableOpacity onPress={handleCartButtonPress}> */}
+                        <TouchableOpacity onPress={() => navigation.navigate('Purchases')}>
+                        <View style={styles.cartButtonContainer}>
+                            <Icon name='shopping-cart' size={24} color='white' style={styles.footerIcon} />
+                        </View>
                         </TouchableOpacity>
                     </View>
 
@@ -511,13 +348,18 @@ const Items = () => {
                     </View>
                 </View>
             </View>
-        </View>
+        </View >
     );
 };
 
 const styles = StyleSheet.create({
+    searchBarContainer: {
+        flex: 1,                  // Take full height to center vertically
+        justifyContent: 'center', // Center contents vertically
+        alignItems: 'center',     // Center contents horizontally
+    },
     searchContainer: {
-        width: 300,
+        width: 250,              // Set width
         height: 45,
         borderRadius: 25,
         flexDirection: 'row',
@@ -526,8 +368,9 @@ const styles = StyleSheet.create({
         borderColor: 'white',
         borderWidth: 1,
         paddingHorizontal: 10,
-        marginBottom: 20,
-        marginTop: 20,
+        marginBottom: 10,
+        marginTop: 10,
+        // Removed marginLeft
     },
     searchInput: {
         flex: 1,
@@ -536,38 +379,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: 'black',
         backgroundColor: 'white',
-    },
-    horizontalItemContainer: {
-        width: 190,
-        height: 230,
-        backgroundColor: '#006400',
-        marginLeft: 10,
-        borderRadius: 5,
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-    },
-    horizontalImage: {
-        width: 140,
-        height: 110,
-        borderRadius: 10,
-        marginTop: 5,
-        marginBottom: 0,
-        marginLeft: 10,
-    },
-    horizontalItemName: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: 'white',
-        textAlign: 'center',
-    },
-    horizontalItemPrice: {
-        fontSize: 14,
-        color: 'white',
-        textAlign: 'center',
-        marginBottom: 25,
     },
     buttonWrapper: {
         flexDirection: 'row',
@@ -578,22 +389,24 @@ const styles = StyleSheet.create({
         marginTop: 10,
         alignItems: 'flex-start',
     },
-    stockBadge: {
-        width: 45,
-        height: 25,
+    verticalItemButtons: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        marginTop: 10,
+    },
+    stockBadgeVertical: {
+        width: 30,
+        height: 30,
         borderRadius: 15,
         backgroundColor: 'green',
-        justifyContent: 'center',
         alignItems: 'center',
-        position: 'absolute',
-        top: -20,
-        right: -10,
+        justifyContent: 'center',
+        marginRight: 10,  // Adjusts position relative to the right side of the card
     },
     stockText: {
-        fontSize: 12,
         color: 'white',
-        textAlign: 'center',
-        lineHeight: 12,
+        fontWeight: 'bold',
     },
     categoryTitle: {
         color: 'black',
@@ -603,12 +416,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     categoryScroll: {
-        marginBottom: 20,
+        marginBottom: 3,
     },
     categoryContainer: {
         flexDirection: 'row',
         paddingHorizontal: 10,
-        paddingVertical: 20,
+        paddingVertical: 5,
     },
     categoryItem: {
         marginHorizontal: 5,
@@ -616,7 +429,7 @@ const styles = StyleSheet.create({
     categoryCard: {
         width: 200,
         height: 80,
-        backgroundColor: 'white',
+        backgroundColor: '#006400',
         borderRadius: 10,
         elevation: 3,
     },
@@ -625,27 +438,28 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     categoryName: {
-        color: 'black',
+        color: 'white',
         fontSize: 16,
         fontWeight: 'bold',
     },
     categoryCount: {
-        color: 'green',
-        fontSize: 14,
+        color: 'white',
+        fontSize: 12,
     },
     noCategories: {
         color: 'black',
         fontSize: 16,
     },
     featuredTitleContainer: {
-        paddingHorizontal: 10,
+        paddingHorizontal: 0,
         marginBottom: 0,
     },
     featuredTitle: {
         color: 'black',
         fontSize: 16,
         fontWeight: 'bold',
-        paddingVertical: 20,
+        paddingVertical: 5,
+        textAlign: "center"
     },
     menuCount: {
         color: 'green',
@@ -655,7 +469,7 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     verticalItemContainer: {
-        width: '100%',
+        width: '90%',
         height: 150,
         backgroundColor: 'white',
         borderRadius: 15,
@@ -664,7 +478,9 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
-    },
+        marginLeft: '5%', // Centers the card horizontally if the width is 90%
+    }
+    ,
     verticalItemContent: {
         padding: 10,
         flexDirection: 'row',
@@ -692,69 +508,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    stockBadgeVertical: {
-        width: 45,
-        height: 25,
-        borderRadius: 15,
-        backgroundColor: 'green',
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: 'absolute',
-        top: -20,
-        right: 0,
-    },
-    modalContainer: {
-        backgroundColor: 'white',
-        padding: 20,
-        borderRadius: 10,
-        margin: 20,
-        elevation: 5,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-
-    modalContent: {
-        alignItems: 'center',
-    },
-    modalHeader: {
-        flexDirection: 'row',
-    },
-    modalTitle: {
-        fontWeight: 'bold',
-        fontSize: 15,
-        marginLeft: 10,
-        marginTop: 10,
-    },
-    closeButton: {
-        color: 'red',
-        marginLeft: 90,
-    },
-    modalItemContainer: {
-        width: '110%',
-        height: 150,
-        backgroundColor: 'white',
-        borderRadius: 15,
-        elevation: 5,
-        marginBottom: 10,
-    },
-    modalItemContent: {
-        flexDirection: 'row',
-    },
-    modalImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 10,
-        alignSelf: 'center',
-        marginBottom: 10,
-        marginLeft: 10,
-        marginTop: 20,
-    },
-    modalPrice: {
-        fontSize: 16,
-        color: 'green',
-        marginBottom: 20,
-        textAlign: 'right',
     },
     quantityContainer: {
         flexDirection: 'row',
@@ -817,6 +570,38 @@ const styles = StyleSheet.create({
     },
     heartIcon: {
         marginLeft: 10,
+    },
+    modalContainer: {
+        flex: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        paddingHorizontal: 20, // Optional, to add padding on sides
+    },
+    modalContent: {
+        width: '100%',
+        maxHeight: 300, // Constrain the height to fit on smaller screens
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 20,
+        elevation: 5,
+    },
+    modalTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    modalItem: {
+        marginBottom: 15, // Space between items
+    },
+    modalItemName: {
+        fontSize: 16,
+    },
+    modalItemPrice: {
+        fontSize: 14,
+    },
+    closeModalButton: {
+        marginTop: 20,
     },
 });
 

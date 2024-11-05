@@ -12,12 +12,12 @@ const ItemDetail = lazy(() => import('./components/others/staticitems'));
 const CartScreen = lazy(() => import('./components/others/CartScreen'));
 const Register = lazy(() => import('./components/home/login/register'));
 const Login = lazy(() => import('./components/home/login/login'));
-const MainScreen = lazy(() => import('./screens/MainScreen'));
+// const MainScreen = lazy(() => import('./screens/MainScreen'));
 const ResetPassword = lazy(() => import('./components/home/login/resetpassword'));
 const Newcode = lazy(() => import('./components/home/login/Code'));
 const Newpass = lazy(() => import('./components/home/login/newpassword'));
 const Gunners = lazy(() => import('./components/home/login/Gunners'));
-const Homepage = lazy(() => import('./screens/homepage'));
+// const Homepage = lazy(() => import('./screens/homepage'));
 const Mainmenu = lazy(() => import('./components/others/menu'));
 const Profile = lazy(() => import('./components/home/Profile'));
 const Products = lazy(() => import('./components/others/products'));
@@ -51,7 +51,7 @@ const App = () => {
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Root">
             <Stack.Screen name="Root" component={RootScreen} options={{ headerShown: false }} />
-            <Stack.Screen name="Main" component={MainScreen} options={{ headerShown: false }} />
+            {/* <Stack.Screen name="Main" component={MainScreen} options={{ headerShown: false }} /> */}
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Favourites" component={Favourites} />
             <Stack.Screen name="Detail">
@@ -125,14 +125,14 @@ const App = () => {
                 </Suspense>
               )}
             </Stack.Screen>
-            <Stack.Screen name="homepage" options={{ headerShown: false }}>
+            {/* <Stack.Screen name="homepage" options={{ headerShown: false }}>
               {() => (
                 <Suspense fallback={<Text>Loading component, please wait...</Text>}
 >
                   <Homepage />
                 </Suspense>
               )}
-            </Stack.Screen>
+            </Stack.Screen> */}
             <Stack.Screen name="Profile">
               {() => (
                 <Suspense fallback={<Text>Loading component, please wait...</Text>}

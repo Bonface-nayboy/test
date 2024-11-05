@@ -91,14 +91,14 @@ const Register = () => {
             <Card style={styles.card}>
                 <Text style={styles.text}>Register</Text>
                 <View style={{ marginVertical: 1 }}>
-                    <Text style={{ color: '#aaa', marginBottom: 5 }}>Username</Text>
+                    <Text style={{ color: 'black', marginBottom: 5 }}>Username</Text>
                     <TextInput
                         value={username}
                         onChangeText={setUsername}
                         placeholder="Enter username"
                         style={styles.input}
                     />
-                    <Text style={{ color: '#aaa', marginBottom: 5 }}>Email</Text>
+                    <Text style={{ color: 'black', marginBottom: 5 }}>Email</Text>
                     <TextInput
                         value={email}
                         onChangeText={setEmail}
@@ -108,7 +108,7 @@ const Register = () => {
                 </View>
 
                 <View style={{ marginVertical: 5 }}>
-                    <Text style={{ color: '#aaa', marginBottom: 5 }}>Password</Text>
+                    <Text style={{ color: 'black', marginBottom: 5 }}>Password</Text>
                     <View style={{
                         flexDirection: 'row',
                         alignItems: 'center',

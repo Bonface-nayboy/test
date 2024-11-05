@@ -14,7 +14,8 @@ const Gunners = () => {
                 marginTop:50,
                 textAlign:'center',
                 fontWeight:'bold',
-                fontSize:20
+                fontSize:20,
+                color:'black'
                }} >Let's Meet Our Summer Drinks</Text>
 
             <Image
@@ -90,7 +91,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 24,
-        marginBottom: 10
+        marginBottom: 10,
+        color:'black'
     },
     Button: {
         marginTop: 10,

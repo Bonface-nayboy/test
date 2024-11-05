@@ -17,7 +17,7 @@ const Login = () => {
         setShowPassword(!showPassword);
     };
 
-    
+
 
     const handleLogin = async () => {
         try {
@@ -26,34 +26,34 @@ const Login = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username, password }), 
+                body: JSON.stringify({ username, password }),
             });
-    
+
             const result = await response.json();
             console.log('Login response:', result);
-    
+
             // Check if the login was successful
             if (result.success) {
                 const { id, email, username } = result.user; // Destructure to get user details
                 await AsyncStorage.setItem('userCredentials', JSON.stringify(result.user));
                 await AsyncStorage.setItem('username', username);
                 await AsyncStorage.setItem('userEmail', email); // When logging in, store the correct email
-    
+
                 // Log the stored email
                 const storedEmail = await AsyncStorage.getItem('userEmail');
                 console.log('Stored email after login:', storedEmail);
-    
+
                 // Clear input fields
                 setUsername('');
                 setPassword('');
-    
+
                 // Toast.show({
                 //     type: 'success',
                 //     text1: 'Login Successfully',
                 //     text2: `Welcome back, ${username}! 👋`
                 // });
                 Alert.alert('Login Successful', `Welcome back, ${username}! 👋`);
-                navigation.navigate('CoolScreen');
+                navigation.navigate('Items');
             } else {
                 Alert.alert('Login Failed', 'Username or password is incorrect!');
             }
@@ -62,21 +62,13 @@ const Login = () => {
             Alert.alert('Login Error', error.message);
         }
     };
-    
-    
+
+
 
     return (
         <View style={styles.container}>
 
             <Text style={styles.text2} >Please Login inorder to access more features</Text>
-
-            {/* <Image
-                source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStbILlI_OrzYm0Iiqg0-YOD7_xljFFNhulAg&s' }}
-                alt="yought_image"
-                width={150}
-                height={130}
-                style={{ marginLeft: 0, marginBottom: 10, borderRadius: 100 }}
-            /> */}
 
             <Card style={styles.card}>
                 <Text style={styles.text1}>Login</Text>
@@ -93,36 +85,8 @@ const Login = () => {
                     />
                 </View>
 
-                {/* <View style={styles.containerm}>
-                    <TextInput
-                        style={styles.input}
-                        value={username}
-                        onChangeText={setUsername}
-                        placeholder="Enter username"
-                    />
-                </View>
-
-                <View style={styles.containerm}>
-                    <TextInput
-                        secureTextEntry={!showPassword}
-                        value={password}
-                        onChangeText={setPassword}
-                        style={styles.input}
-                        placeholder="Enter Password"
-                    />
-                    <MaterialCommunityIcons
-                        name={showPassword ? "eye-off" : "eye"}
-                        size={24}
-                        color="#aaa"
-                        style={styles.icon}
-                        onPress={toggleShowPassword}
-                    />
-                </View> */}
-
-
-
                 <View style={{ marginVertical: 1 }}>
-                    <Text style={{ color: '#aaa', marginBottom: 5 }}>Username</Text>
+                    <Text style={{ color: 'black', marginBottom: 5 }}>Username</Text>
                     <View style={{
                         flexDirection: 'row',
                         alignItems: 'center',
@@ -154,7 +118,7 @@ const Login = () => {
 
 
                 <View style={{ marginVertical: 5 }}>
-                    <Text style={{ color: '#aaa', marginBottom: 5 }}>Password</Text>
+                    <Text style={{ color: 'black', marginBottom: 5 }}>Password</Text>
                     <View style={{
                         flexDirection: 'row',
                         alignItems: 'center',
@@ -263,7 +227,7 @@ const styles = StyleSheet.create({
     input: {
         height: 50,
         fontSize: 16,
-        color: "white",
+        color: "black",
         backgroundColor: "white",
         marginLeft: 0
 

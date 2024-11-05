@@ -29,7 +29,7 @@ export default function CoolScreen() {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>Welcome To The Party!</Text>
+            {/* <Text style={styles.text}>Welcome To The Party!</Text> */}
             <Card style={styles.card}>
                 <Animated.Image
                     source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQaB3HvhaEfoC3RhvZHnCh2iizz1wnoL13pg&s' }}
