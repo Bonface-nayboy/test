@@ -6,6 +6,9 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import HomeScreen from './components/home/homescreen';
 import Favourites from './components/others/favourites';
 import { ThemeProvider } from './components/others/theme';
+import { BasketProvider } from './BasketContext';
+import Toast from 'react-native-toast-message';
+
 
 // Lazy load screens
 const ItemDetail = lazy(() => import('./components/others/staticitems'));
@@ -29,6 +32,7 @@ const Receipt = lazy(() => import('./screens/sales/Receipt'));
 const CoolScreen = lazy(() => import('./screens/coolscreen'));
 const MainSales = lazy(() => import('./screens/sales/mainSales'));
 const PurchaseReceipt = lazy(() => import('./screens/purchases/PurchaseReceipt'));
+const Category=lazy(()=> import('./components/others/category'));
 
 const Stack = createNativeStackNavigator();
 
@@ -48,6 +52,7 @@ const App = () => {
   return (
     <ThemeProvider>
       <PaperProvider>
+      <BasketProvider> 
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Root">
             <Stack.Screen name="Root" component={RootScreen} options={{ headerShown: false }} />
@@ -98,6 +103,14 @@ const App = () => {
                 <Suspense fallback={<Text>Loading component, please wait...</Text>}
 >
                   <ResetPassword />
+                </Suspense>
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Category">
+              {() => (
+                <Suspense fallback={<Text>Loading component, please wait...</Text>}
+>
+                  <Category/>
                 </Suspense>
               )}
             </Stack.Screen>
@@ -214,7 +227,9 @@ const App = () => {
               )}
             </Stack.Screen>
           </Stack.Navigator>
+          <Toast/>
         </NavigationContainer>
+        </BasketProvider>
       </PaperProvider>
     </ThemeProvider>
   );

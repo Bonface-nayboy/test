@@ -1,12 +1,21 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { Image, TouchableOpacity, ScrollView, View, StyleSheet, TextInput, Modal, Alert} from 'react-native';
+import { Image, TouchableOpacity } from 'react-native';
+import { ScrollView, View, StyleSheet, TextInput, Modal, Alert } from 'react-native';
 import { Text, Card, Button } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+const Category = () => {
+    const navigation = useNavigation();
+    const route = useRoute(); 
+    const { categoryName } = route.params || {}; 
 
-export default function MainSales() {
+    if (!categoryName) {
+     
+        return null; 
+    }
+
     const [items, setItems] = useState([]);
     const [basket, setBasket] = useState({});
     const [prices, setPrice] = useState({});
@@ -15,8 +24,6 @@ export default function MainSales() {
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
     const [mobileNumber, setMobileNumber] = useState('');
     const [isPostEnabled, setIsPostEnabled] = useState(false);
-
-    const navigation = useNavigation();
 
     const paymentMethods = [
         { id: 'cash', name: 'Cash                                   💰', icon: 'money' },
@@ -34,7 +41,7 @@ export default function MainSales() {
             const result = await response.json();
             setItems(result);
         } catch (error) {
-            console.error('Error fetching the products:', error);
+            console.error('Error fetching the products:', error.message);
         }
     };
 
@@ -42,6 +49,7 @@ export default function MainSales() {
         fetchItems();
     }, []);
 
+   
     useEffect(() => {
         setIsPostEnabled(selectedPaymentMethod === 'cash' || (selectedPaymentMethod === 'mpesa' && mobileNumber.length === 10));
     }, [selectedPaymentMethod, mobileNumber]);
@@ -124,10 +132,12 @@ export default function MainSales() {
         }, 0).toFixed(2);
     };
 
+
     return (
         <View style={styles.container}>
+            <Text style={styles.title}>Products in {categoryName}</Text>
             <ScrollView>
-                {items.map((item) => (
+                {items.filter(item => item.category === categoryName).map((item) => (
                     <Card key={item.id} style={styles.card}>
                         <TouchableOpacity onPress={() => handleToggleItem(item)}>
                             <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
@@ -151,7 +161,6 @@ export default function MainSales() {
                                                 onChangeText={(text) => setPrice(prev => ({ ...prev, [item.id]: text }))}
                                                 style={[styles.input, { marginBottom: 10 }]}
                                             />
-
                                             <TextInput
                                                 placeholder="Quantity"
                                                 keyboardType="numeric"
@@ -222,7 +231,7 @@ export default function MainSales() {
             </Modal>
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -234,14 +243,13 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
-        marginVertical: 0,
+        marginVertical: 10,
     },
     card: {
         marginBottom: 12,
         borderRadius: 8,
         height: 170,
         backgroundColor: 'white',
-        width: 330,
     },
     image: {
         height: 100,
@@ -249,33 +257,31 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         marginLeft: 3,
         marginTop: 20,
-
     },
     productName: {
         fontSize: 18,
         fontWeight: '600',
         marginTop: 10,
         marginLeft: 4,
-        color: 'Black'
+        color: 'Black',
     },
     quantity: {
         fontSize: 14,
         color: 'green',
-    },
-    inputContainer: {
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginTop: 8,
     },
     input: {
         borderWidth: 1,
         borderColor: '#ccc',
         borderRadius: 5,
         padding: 8,
-        width: '80%', // Set to 100% for full width
+        width: '80%',
     },
-    button: {
-        marginTop: 16,
+    confirmButton: {
+        backgroundColor: '#006400',
+        paddingVertical: 10,
+        paddingHorizontal: 30,
+        borderRadius: 25,
+        marginTop: 10,
     },
     modalContainer: {
         flex: 1,
@@ -317,4 +323,4 @@ const styles = StyleSheet.create({
     },
 });
 
-
+export default Category;
