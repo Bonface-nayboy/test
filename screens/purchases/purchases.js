@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { Image, TouchableOpacity, ScrollView, View, StyleSheet, TextInput, Modal, Alert } from 'react-native';
 import { Text, Card, Button } from 'react-native-paper';
+import Toast from 'react-native-toast-message';
 // import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -116,18 +117,29 @@ export default function Purchases() {
             setModalVisible(false);
 
             // Show success toast message
-            // Toast.show({
-            //     type: 'success',
-            //     text1: 'Purchases have been successfully posted',
-            //     text2: 'Now you can sell the items!',
-            // });
-            Alert.alert('Purchases have been successfully posted');
+            Toast.show({
+                type: 'success',
+                text1: 'Purchases have been successfully posted',
+                text2: 'Now you can sell the items!',
+                position: 'top',
+                visibilityTime: 3000,
+                autoHide: true,
+            });
+            // Alert.alert('Purchases have been successfully posted');
 
             // Navigate to Receipt screen and pass purchase data and total price
             // navigation.navigate('PurchaseReceipt', { purchaseData, totalPrice });
 
         } catch (error) {
             console.error('Error posting the purchases:', error);
+            Toast.show({
+                text1: 'Failed To Post The purchases!',
+                text2: 'Confirm The Method Of Payment.',
+                type: 'error',
+                position: 'top',
+                visibilityTime: 3000,
+                autoHide: true,
+            });
         }
     };
 

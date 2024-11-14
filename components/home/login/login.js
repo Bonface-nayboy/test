@@ -47,19 +47,29 @@ const Login = () => {
                 setUsername('');
                 setPassword('');
 
-                // Toast.show({
-                //     type: 'success',
-                //     text1: 'Login Successfully',
-                //     text2: `Welcome back, ${username}! 👋`
-                // });
-                Alert.alert('Login Successful', `Welcome back, ${username}! 👋`);
+                Toast.show({
+                    type: 'success',
+                    text1: 'Login Successfully',
+                    text2: `Welcome back, ${username}! 👋`,
+                    position: 'top',
+                    visibilityTime: 3000,
+                    autoHide: true,
+                });
+               
                 navigation.navigate('Items');
             } else {
                 Alert.alert('Login Failed', 'Username or password is incorrect!');
             }
         } catch (error) {
             console.error('Error Logging in:', error);
-            Alert.alert('Login Error', error.message);
+            Toast.show({
+                text1: 'Login Failed!',
+                text2: 'Check if your credentials are correct.',
+                type: 'error',
+                position: 'top',
+                visibilityTime: 3000,
+                autoHide: true,
+              });
         }
     };
 

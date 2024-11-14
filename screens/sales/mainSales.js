@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { Image, TouchableOpacity, ScrollView, View, StyleSheet, TextInput, Modal, Alert} from 'react-native';
 import { Text, Card, Button } from 'react-native-paper';
+import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
@@ -109,10 +110,25 @@ export default function MainSales() {
             const totalPrice = calculateTotalPrice();
             // navigation.navigate('Receipt', { salesData, totalPrice });
 
-             Alert.alert('Sales Posted successfully !')
+            Toast.show({
+                text1: 'Sale Successful!',
+                text2: 'Your items have been sold successfully.',
+                type: 'success',
+                position: 'top',
+                visibilityTime: 3000,
+                autoHide: true,
+              });
+        
               navigation.navigate('Items');
         } catch (error) {
-            Alert.alert(`Error posting sales: ${error.message}`);
+            Toast.show({
+                text1: 'Failed To Post The Sale!',
+                text2: 'Confirm The Method Of Payment.',
+                type: 'error',
+                position: 'top',
+                visibilityTime: 3000,
+                autoHide: true,
+              });
             console.error('Error posting sale:', error);
         }
     };

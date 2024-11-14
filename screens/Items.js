@@ -85,8 +85,8 @@ const Items = () => {
 
     const onRefresh = async () => {
         setRefreshing(true);
-        await fetchItems();
-        setRefreshing(false);
+        await fetchItems(); // Calling the same fetchItems function for refresh
+        setRefreshing(false); // Call this after fetch is complete
     };
 
     const addItemToBasketHandler = () => {
