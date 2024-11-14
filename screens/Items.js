@@ -282,6 +282,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
         backgroundColor: 'white',
+        color: 'black',
     },
     categoryScroll: {
         marginBottom: 3,
@@ -353,6 +354,7 @@ const styles = StyleSheet.create({
     verticalItemName: {
         fontSize: 16,
         fontWeight: 'bold',
+        color: 'black',
     },
     verticalItemPrice: {
         fontSize: 14,

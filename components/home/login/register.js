@@ -128,14 +128,14 @@ const Register = () => {
                             style={{
                                 flex: 0.9,
                                 height: 10,
-                                color: '#000',
+                                color: 'black',
                                 backgroundColor: 'white'
                             }}
                         />
                         <MaterialCommunityIcons
                             name={showPassword ? "eye-off" : "eye"}
                             size={24}
-                            color="#aaa"
+                            color="black"
                             onPress={toggleShowPassword}
                             style={{ marginLeft: 10 }}
                         />
@@ -226,7 +226,7 @@ button1: {
 input: {
     width: 'auto',
     fontSize: 16,
-    color: "white",
+    color: 'black',
     backgroundColor: "white",
     marginLeft: 0
 

@@ -250,6 +250,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginVertical: 10,
+        color: 'black',
     },
     card: {
         marginBottom: 10,
@@ -265,7 +266,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     productName: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: '600',
         marginTop: 10,
         marginLeft: 4,

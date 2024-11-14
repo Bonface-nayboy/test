@@ -52,7 +52,7 @@ const Profile = () => {
             </View>
             <TextInput
               placeholder="Enter phone number"
-              placeholderTextColor='#aaa'
+              placeholderTextColor='black'
               value={mobile}
               style={styles.textInput}
               onChangeText={setMobile}
@@ -65,7 +65,7 @@ const Profile = () => {
             </View>
             <TextInput
               placeholder="Enter username"
-              placeholderTextColor='#aaa'
+              placeholderTextColor='black'
               value={username}
               style={styles.textInput}
               onChangeText={setUsername}
@@ -78,7 +78,7 @@ const Profile = () => {
             </View>
             <TextInput
               placeholder="Enter email address"
-              placeholderTextColor='#aaa'
+              placeholderTextColor='black'
               value={email}
               style={styles.textInput}
               onChangeText={setEmail}

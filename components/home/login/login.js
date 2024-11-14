@@ -118,7 +118,7 @@ const Login = () => {
                             style={{
                                 flex: 0.9,
                                 height: 10,
-                                color: '#000',
+                                color: 'black',
                                 backgroundColor: 'white'
                             }}
                         />
@@ -148,14 +148,14 @@ const Login = () => {
                             style={{
                                 flex: 0.9,
                                 height: 10,
-                                color: '#000',
+                                color: 'black',
                                 backgroundColor: 'white'
                             }}
                         />
                         <MaterialCommunityIcons
                             name={showPassword ? "eye-off" : "eye"}
                             size={24}
-                            color="#aaa"
+                            color="black"
                             onPress={toggleShowPassword}
                             style={{ marginLeft: 10 }}
                         />
