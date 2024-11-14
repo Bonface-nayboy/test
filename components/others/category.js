@@ -12,7 +12,6 @@ const Category = () => {
     const { categoryName } = route.params || {}; 
 
     if (!categoryName) {
-     
         return null; 
     }
 
@@ -49,7 +48,6 @@ const Category = () => {
         fetchItems();
     }, []);
 
-   
     useEffect(() => {
         setIsPostEnabled(selectedPaymentMethod === 'cash' || (selectedPaymentMethod === 'mpesa' && mobileNumber.length === 10));
     }, [selectedPaymentMethod, mobileNumber]);
@@ -89,7 +87,6 @@ const Category = () => {
             paymentMethod: selectedPaymentMethod,
             mobileNumber: selectedPaymentMethod === 'mpesa' ? mobileNumber : '',
         }));
-        
 
         console.log("Sales Data:", JSON.stringify(salesData, null, 2));
 
@@ -113,12 +110,8 @@ const Category = () => {
             console.log('Fetched items:', result);
            
             setModalVisible(false);
-
-            const totalPrice = calculateTotalPrice();
-            // navigation.navigate('Receipt', { salesData, totalPrice });
-
-             Alert.alert('Sales Posted successfully !')
-              navigation.navigate('Items');
+            Alert.alert('Sales Posted successfully !');
+            navigation.navigate('Items');
         } catch (error) {
             Alert.alert(`Error posting sales: ${error.message}`);
             console.error('Error posting sale:', error);
@@ -132,49 +125,62 @@ const Category = () => {
         }, 0).toFixed(2);
     };
 
-
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Products in {categoryName}</Text>
             <ScrollView>
-                {items.filter(item => item.category === categoryName).map((item) => (
-                    <Card key={item.id} style={styles.card}>
-                        <TouchableOpacity onPress={() => handleToggleItem(item)}>
-                            <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-                                {item.product_image && (
-                                    <Image
-                                        source={{ uri: item.product_image }}
-                                        style={styles.image}
-                                    />
-                                )}
-                                <View style={{ marginLeft: 10, flexDirection: 'column', flex: 1 }}>
-                                    <Text style={styles.productName}>{item.product_name}</Text>
-                                    {item.stock > 0 && (
-                                        <Text style={styles.quantity}>Available: {item.stock}</Text>
+                {items.filter(item => item.category === categoryName).map((item) => {
+                    const isOutOfStock = item.stock <= 0; // Check stock status
+
+                    return (
+                        <Card key={item.id} style={styles.card}>
+                            <TouchableOpacity 
+                                onPress={!isOutOfStock ? () => handleToggleItem(item) : null} // Disable onPress if out of stock
+                                disabled={isOutOfStock} // Disable interaction if out of stock
+                            >
+                                <View style={{ flexDirection: 'row', alignItems: 'flex-start', position: 'relative' }}>
+                                    {item.product_image && (
+                                        <Image
+                                            source={{ uri: item.product_image }}
+                                            style={styles.image}
+                                        />
                                     )}
-                                    {basket[item.id] && (
-                                        <View style={{ marginTop: 5 }}>
-                                            <TextInput
-                                                placeholder="Sale Price"
-                                                keyboardType="numeric"
-                                                value={prices[item.id]}
-                                                onChangeText={(text) => setPrice(prev => ({ ...prev, [item.id]: text }))}
-                                                style={[styles.input, { marginBottom: 10 }]}
-                                            />
-                                            <TextInput
-                                                placeholder="Quantity"
-                                                keyboardType="numeric"
-                                                value={quantities[item.id]?.toString() || ''}
-                                                onChangeText={(text) => setQuantities(prev => ({ ...prev, [item.id]: text ? parseInt(text, 10) : '' }))}
-                                                style={styles.input}
-                                            />
+                                    <View style={{ marginLeft: 10, flexDirection: 'column', flex: 1 }}>
+                                        <Text style={styles.productName}>{item.product_name}</Text>
+                                        {isOutOfStock ? (
+                                            <Text style={styles.quantity}>Out of Stock</Text>
+                                        ) : (
+                                            <Text style={styles.quantity}>Available: {item.stock}</Text>
+                                        )}
+                                        {basket[item.id] && (
+                                            <View style={{ marginTop: 5 }}>
+                                                <TextInput
+                                                    placeholder="Sale Price"
+                                                    keyboardType="numeric"
+                                                    value={prices[item.id]}
+                                                    onChangeText={(text) => setPrice(prev => ({ ...prev, [item.id]: text }))}
+                                                    style={[styles.input, { marginBottom: 3 }]}
+                                                />
+                                                <TextInput
+                                                    placeholder="Quantity"
+                                                    keyboardType="numeric"
+                                                    value={quantities[item.id]?.toString() || ''}
+                                                    onChangeText={(text) => setQuantities(prev => ({ ...prev, [item.id]: text ? parseInt(text, 10) : '' }))}
+                                                    style={[styles.input, { marginBottom: 3 }]}
+                                                />
+                                            </View>
+                                        )}
+                                    </View>
+                                    {isOutOfStock && (
+                                        <View style={styles.outOfStockBanner}>
+                                            <Text style={styles.bannerText}>STOCK DEPLETED</Text>
                                         </View>
                                     )}
                                 </View>
-                            </View>
-                        </TouchableOpacity>
-                    </Card>
-                ))}
+                            </TouchableOpacity>
+                        </Card>
+                    );
+                })}
             </ScrollView>
             <Button onPress={() => setModalVisible(true)} mode="contained" style={{ backgroundColor: '#006400', paddingVertical: 10, paddingHorizontal: 30, borderRadius: 25 }}>
                 <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Confirm Sales</Text>
@@ -236,7 +242,7 @@ const Category = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 10,
+        padding: 1,
         backgroundColor: 'white',
     },
     title: {
@@ -246,14 +252,14 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     card: {
-        marginBottom: 12,
+        marginBottom: 10,
         borderRadius: 8,
-        height: 170,
         backgroundColor: 'white',
+        padding:0
     },
     image: {
-        height: 100,
-        width: '40%',
+        height: 90,
+        width: 90,
         borderRadius: 8,
         marginLeft: 3,
         marginTop: 20,
@@ -275,13 +281,6 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         padding: 8,
         width: '80%',
-    },
-    confirmButton: {
-        backgroundColor: '#006400',
-        paddingVertical: 10,
-        paddingHorizontal: 30,
-        borderRadius: 25,
-        marginTop: 10,
     },
     modalContainer: {
         flex: 1,
@@ -320,6 +319,27 @@ const styles = StyleSheet.create({
     },
     closeButton: {
         marginTop: 10,
+    },
+    outOfStockBanner: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(255, 215, 0, 0.5)',  // Semi-transparent gold background
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 1, // Ensure it is above other components
+    },
+    bannerText: {
+        color: 'red',
+        fontWeight: 'bold',
+        fontSize: 20,
+        textAlign:"center",
+        marginTop:40
+    },
+    disabledItem: {
+        opacity: 0.5, // visual indication that item is disabled
     },
 });
 

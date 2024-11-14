@@ -168,13 +168,13 @@ export default function MainSales() {
                                                 <Text style={styles.quantity}>Available: {item.stock}</Text>
                                             )}
                                             {basket[item.id] && (
-                                                <View style={{ marginTop: 5 }}>
+                                                <View style={{ marginTop: 3 }}>
                                                     <TextInput
                                                         placeholder="Sale Price"
                                                         keyboardType="numeric"
                                                         value={prices[item.id]}
                                                         onChangeText={(text) => setPrice(prev => ({ ...prev, [item.id]: text }))}
-                                                        style={[styles.input, { marginBottom: 10 }]}
+                                                        style={[styles.input, { marginBottom: 3 }]}
                                                     />
 
                                                     <TextInput
@@ -182,7 +182,7 @@ export default function MainSales() {
                                                         keyboardType="numeric"
                                                         value={quantities[item.id]?.toString() || ''}
                                                         onChangeText={(text) => setQuantities(prev => ({ ...prev, [item.id]: text ? parseInt(text, 10) : '' }))}
-                                                        style={styles.input}
+                                                        style={[styles.input, { marginBottom: 3 }]}
                                                     />
                                                 </View>
                                             )}
@@ -266,14 +266,12 @@ const styles = StyleSheet.create({
     card: {
         marginBottom: 12,
         borderRadius: 8,
-        height: 170,
         backgroundColor: 'white',
-        width: 330,
         position: 'relative', // Important for absolute positioned elements
     },
     image: {
-        height: 100,
-        width: '40%',
+        height: 90,
+        width: 90,
         borderRadius: 8,
         marginLeft: 3,
         marginTop: 20,
