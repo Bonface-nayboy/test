@@ -6,6 +6,7 @@ import { Avatar, Button, Card, Text, TextInput } from "react-native-paper";
 // import Toast from "react-native-toast-message";
 import Icon from "react-native-vector-icons/FontAwesome";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from "react-native-toast-message";
 
 const Login = () => {
     const [username, setUsername] = useState('');

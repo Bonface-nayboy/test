@@ -115,6 +115,7 @@ const Items = () => {
     };
 
 
+
     if (loading) {
         return <ActivityIndicator size="small" color="green" />;
     }
@@ -167,61 +168,74 @@ const Items = () => {
                     </View>
                 </ScrollView>
                 <Text style={styles.featuredTitle}>Products</Text>
-                {filteredItems.map((item) => (
-                    <View key={item.id} style={styles.verticalItemWrapper}>
-                        <Card style={styles.verticalItemContainer}>
-                            <TouchableOpacity onPress={() => handleItemSelect(item)}>
-                                <View style={styles.verticalItemContent}>
-                                    {item.product_image && (
-                                        <Image
-                                            source={{ uri: item.product_image }}
-                                            style={styles.productImage}
-                                        />
-                                    )}
-                                    <View style={styles.verticalItemTextContainer}>
-                                        <Text style={styles.verticalItemName}>{item.product_name}</Text>
-                                        <Text style={styles.verticalItemPrice}>Ksh {item.product_price}</Text>
-                                        {selectedItemDetails && selectedItemDetails.id === item.id && (
-                                            <View style={styles.itemDetailContainer}>
-                                                <View style={styles.priceQuantityContainer}>
-                                                    {/* Quantity circle */}
-                                                    <View style={styles.quantityCircle}>
-                                                        {item.stock > 0 && (
-                                                            <Text style={styles.quantityText}>
-                                                                {item.stock}
-                                                            </Text>
-                                                        )}
-                                                    </View>
-                                                    <TextInput
-                                                        placeholder="Sale Price"
-                                                        keyboardType="numeric"
-                                                        value={prices[item.id] ? prices[item.id].toString() : item.product_price.toString()}
-                                                        onChangeText={(text) => setPrices(prev => ({ ...prev, [item.id]: text }))}
-                                                        style={[styles.input, { marginBottom: 3 }]}
-                                                    />
-                                                    <TextInput
-                                                        placeholder="Quantity"
-                                                        keyboardType="numeric"
-                                                        value={quantities[item.id]?.toString() || ''}
-                                                        onChangeText={(text) => setQuantities(prev => ({ ...prev, [item.id]: text ? parseInt(text, 10) : 0 }))}
-                                                        style={styles.input}
-                                                    />
-                                                </View>
-                                                <Button
-                                                    style={{ backgroundColor: '#006400' }}
-                                                    onPress={addItemToBasketHandler}
-                                                    mode="contained"
-                                                >
-                                                    <Icon name="shopping-basket" color="white" size={24} />
-                                                </Button>
-                                            </View>
-                                        )}
+                {filteredItems.map((item) => {
+                    const isOutOfStock = item.stock <= 0; // Check stock status here
+
+                    return (
+                        <View key={item.id} style={styles.verticalItemWrapper}>
+                            <View style={styles.verticalItemContainer}>
+                                {isOutOfStock && (
+                                    <View style={styles.outOfStockBanner}>
+                                        <Text style={styles.bannerText}>STOCK DEPLETED</Text>
                                     </View>
-                                </View>
-                            </TouchableOpacity>
-                        </Card>
-                    </View>
-                ))}
+                                )}
+                                <TouchableOpacity
+                                    onPress={() => handleItemSelect(item)}
+                                    disabled={isOutOfStock} // Disable if out of stock
+                                    style={[styles.card, isOutOfStock ? styles.disabledItem : null]} // Change styles based on stock
+                                >
+                                    <View style={styles.verticalItemContent}>
+                                        {item.product_image && (
+                                            <Image
+                                                source={{ uri: item.product_image }}
+                                                style={styles.productImage}
+                                            />
+                                        )}
+                                        <View style={styles.verticalItemTextContainer}>
+                                            <Text style={styles.verticalItemName}>{item.product_name}</Text>
+                                            <Text style={styles.verticalItemPrice}>Ksh {item.product_price}</Text>
+                                            {selectedItemDetails && selectedItemDetails.id === item.id && (
+                                                <View style={styles.itemDetailContainer}>
+                                                    <View style={styles.priceQuantityContainer}>
+                                                        <View style={styles.quantityCircle}>
+                                                            {item.stock > 0 && (
+                                                                <Text style={styles.quantityText}>
+                                                                    {item.stock}
+                                                                </Text>
+                                                            )}
+                                                        </View>
+                                                        <TextInput
+                                                            placeholder="Sale Price"
+                                                            keyboardType="numeric"
+                                                            value={prices[item.id] ? prices[item.id].toString() : item.product_price.toString()}
+                                                            onChangeText={(text) => setPrices(prev => ({ ...prev, [item.id]: text }))}
+                                                            style={[styles.input, { marginBottom: 3 }]}
+                                                        />
+                                                        <TextInput
+                                                            placeholder="Quantity"
+                                                            keyboardType="numeric"
+                                                            value={quantities[item.id]?.toString() || ''}
+                                                            onChangeText={(text) => setQuantities(prev => ({ ...prev, [item.id]: text ? parseInt(text, 10) : 0 }))}
+                                                            style={styles.input}
+                                                        />
+                                                    </View>
+                                                    <Button
+                                                        style={{ backgroundColor: '#006400' }}
+                                                        onPress={addItemToBasketHandler}
+                                                        mode="contained"
+                                                    >
+                                                        <Icon name="shopping-basket" color="white" size={20} />
+                                                    </Button>
+                                                </View>
+                                            )}
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    );
+                })}
+
 
             </ScrollView>
             <View style={styles.footerContainer}>
@@ -415,6 +429,27 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         fontSize: 12,
+    },
+    outOfStockBanner: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(255, 215, 0, 0.5)',  // Semi-transparent gold background
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 1, // Ensure it is above other components
+    },
+    bannerText: {
+        color: 'red',
+        fontWeight: 'bold',
+        fontSize: 20,
+        textAlign:"center",
+        marginTop:40
+    },
+    disabledItem: {
+        opacity: 0.5, // visual indication that item is disabled
     },
 });
 

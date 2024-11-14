@@ -1,11 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { Image, TouchableOpacity, ScrollView, View, StyleSheet, TextInput, Modal, Alert} from 'react-native';
+import { Image, TouchableOpacity, ScrollView, View, StyleSheet, TextInput, Modal, Alert } from 'react-native';
 import { Text, Card, Button } from 'react-native-paper';
 import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
 
 export default function MainSales() {
     const [items, setItems] = useState([]);
@@ -83,7 +82,6 @@ export default function MainSales() {
             mobileNumber: selectedPaymentMethod === 'mpesa' ? mobileNumber : '',
         }));
         
-
         console.log("Sales Data:", JSON.stringify(salesData, null, 2));
 
         try {
@@ -108,8 +106,6 @@ export default function MainSales() {
             setModalVisible(false);
 
             const totalPrice = calculateTotalPrice();
-            // navigation.navigate('Receipt', { salesData, totalPrice });
-
             Toast.show({
                 text1: 'Sale Successful!',
                 text2: 'Your items have been sold successfully.',
@@ -117,9 +113,9 @@ export default function MainSales() {
                 position: 'top',
                 visibilityTime: 3000,
                 autoHide: true,
-              });
+            });
         
-              navigation.navigate('Items');
+            navigation.navigate('Items');
         } catch (error) {
             Toast.show({
                 text1: 'Failed To Post The Sale!',
@@ -128,7 +124,7 @@ export default function MainSales() {
                 position: 'top',
                 visibilityTime: 3000,
                 autoHide: true,
-              });
+            });
             console.error('Error posting sale:', error);
         }
     };
@@ -143,45 +139,60 @@ export default function MainSales() {
     return (
         <View style={styles.container}>
             <ScrollView>
-                {items.map((item) => (
-                    <Card key={item.id} style={styles.card}>
-                        <TouchableOpacity onPress={() => handleToggleItem(item)}>
-                            <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-                                {item.product_image && (
-                                    <Image
-                                        source={{ uri: item.product_image }}
-                                        style={styles.image}
-                                    />
-                                )}
-                                <View style={{ marginLeft: 10, flexDirection: 'column', flex: 1 }}>
-                                    <Text style={styles.productName}>{item.product_name}</Text>
-                                    {item.stock > 0 && (
-                                        <Text style={styles.quantity}>Available: {item.stock}</Text>
-                                    )}
-                                    {basket[item.id] && (
-                                        <View style={{ marginTop: 5 }}>
-                                            <TextInput
-                                                placeholder="Sale Price"
-                                                keyboardType="numeric"
-                                                value={prices[item.id]}
-                                                onChangeText={(text) => setPrice(prev => ({ ...prev, [item.id]: text }))}
-                                                style={[styles.input, { marginBottom: 10 }]}
-                                            />
+                {items.map((item) => {
+                    const isOutOfStock = item.stock <= 0; // Check stock status here
 
-                                            <TextInput
-                                                placeholder="Quantity"
-                                                keyboardType="numeric"
-                                                value={quantities[item.id]?.toString() || ''}
-                                                onChangeText={(text) => setQuantities(prev => ({ ...prev, [item.id]: text ? parseInt(text, 10) : '' }))}
-                                                style={styles.input}
+                    return (
+                        <Card key={item.id} style={styles.card}>
+                            <View style={styles.itemContainer}>
+                                {isOutOfStock && (
+                                    <View style={styles.outOfStockBanner}>
+                                        <Text style={styles.bannerText}>STOCK DEPLETED</Text>
+                                    </View>
+                                )}
+                                <TouchableOpacity 
+                                    onPress={() => !isOutOfStock && handleToggleItem(item)} 
+                                    disabled={isOutOfStock} // Disable if out of stock
+                                    style={isOutOfStock ? styles.disabledItem : null} // Change styles based on stock
+                                >
+                                    <View style={{ flexDirection: 'row', alignItems: 'flex-start', position: 'relative' }}>
+                                        {item.product_image && (
+                                            <Image
+                                                source={{ uri: item.product_image }}
+                                                style={styles.image}
                                             />
+                                        )}
+                                        <View style={{ marginLeft: 10, flexDirection: 'column', flex: 1 }}>
+                                            <Text style={styles.productName}>{item.product_name}</Text>
+                                            {item.stock > 0 && (
+                                                <Text style={styles.quantity}>Available: {item.stock}</Text>
+                                            )}
+                                            {basket[item.id] && (
+                                                <View style={{ marginTop: 5 }}>
+                                                    <TextInput
+                                                        placeholder="Sale Price"
+                                                        keyboardType="numeric"
+                                                        value={prices[item.id]}
+                                                        onChangeText={(text) => setPrice(prev => ({ ...prev, [item.id]: text }))}
+                                                        style={[styles.input, { marginBottom: 10 }]}
+                                                    />
+
+                                                    <TextInput
+                                                        placeholder="Quantity"
+                                                        keyboardType="numeric"
+                                                        value={quantities[item.id]?.toString() || ''}
+                                                        onChangeText={(text) => setQuantities(prev => ({ ...prev, [item.id]: text ? parseInt(text, 10) : '' }))}
+                                                        style={styles.input}
+                                                    />
+                                                </View>
+                                            )}
                                         </View>
-                                    )}
-                                </View>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
-                        </TouchableOpacity>
-                    </Card>
-                ))}
+                        </Card>
+                    );
+                })}
             </ScrollView>
             <Button onPress={() => setModalVisible(true)} mode="contained" style={{ backgroundColor: '#006400', paddingVertical: 10, paddingHorizontal: 30, borderRadius: 25 }}>
                 <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Confirm Sales</Text>
@@ -258,6 +269,7 @@ const styles = StyleSheet.create({
         height: 170,
         backgroundColor: 'white',
         width: 330,
+        position: 'relative', // Important for absolute positioned elements
     },
     image: {
         height: 100,
@@ -265,7 +277,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         marginLeft: 3,
         marginTop: 20,
-
     },
     productName: {
         fontSize: 18,
@@ -278,20 +289,12 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: 'green',
     },
-    inputContainer: {
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginTop: 8,
-    },
     input: {
         borderWidth: 1,
         borderColor: '#ccc',
         borderRadius: 5,
         padding: 8,
         width: '80%', // Set to 100% for full width
-    },
-    button: {
-        marginTop: 16,
     },
     modalContainer: {
         flex: 1,
@@ -331,6 +334,23 @@ const styles = StyleSheet.create({
     closeButton: {
         marginTop: 10,
     },
+    outOfStockBanner: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(255, 215, 0, 0.7)',  // Semi-transparent gold
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 1, // Ensure it is above other components
+    },
+    bannerText: {
+        color: 'black',
+        fontWeight: 'bold',
+        fontSize: 20,
+    },
+    disabledItem: {
+        opacity: 0.5, // visual indication that item is disabled
+    },
 });
-
-
