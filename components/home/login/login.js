@@ -119,7 +119,9 @@ const Login = () => {
                                 flex: 0.9,
                                 height: 10,
                                 color: 'black',
-                                backgroundColor: 'white'
+                                backgroundColor: 'white',
+                                padding: 10, // Add padding for text visibility
+                                fontSize: 16,
                             }}
                         />
                     </View>
@@ -149,7 +151,9 @@ const Login = () => {
                                 flex: 0.9,
                                 height: 10,
                                 color: 'black',
-                                backgroundColor: 'white'
+                                backgroundColor: 'white',
+                                padding: 10, // Add padding for text visibility
+                                fontSize: 16,
                             }}
                         />
                         <MaterialCommunityIcons

@@ -1,15 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext, useEffect, useState } from 'react';
-import {
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    View,
-    Image,
-    TouchableOpacity,
-    RefreshControl,
-} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, StatusBar, StyleSheet, View, Image, TouchableOpacity, RefreshControl, } from 'react-native';
 import { ActivityIndicator, Appbar, TextInput, Text, Card, Button } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useBasket } from '../BasketContext';
@@ -24,7 +16,6 @@ const Items = () => {
     const [prices, setPrices] = useState({});
     const [quantities, setQuantities] = useState({});
     const navigation = useNavigation();
-    const [refreshing, setRefreshing] = useState(false);
     const { basketItems, addItemToBasket } = useBasket();
 
     const handleItemSelect = (item) => {
@@ -46,35 +37,36 @@ const Items = () => {
         }));
     };
 
+    // Move fetchItems function to the top level
+    const fetchItems = async () => {
+        setLoading(true); // Set loading to true when fetching items
+        try {
+            const userEmail = await AsyncStorage.getItem('userEmail');
+            const response = await fetch(`https://gunners-7544551f4514.herokuapp.com/api/v1/model?email=${userEmail}`);
+            if (!response.ok) throw new Error(`Could not fetch items. Status: ${response.status}`);
+            const result = await response.json();
+            setItems(result);
+        } catch (error) {
+            console.error('Error fetching items:', error);
+        } finally {
+            setLoading(false); // Set loading to false after fetching completes
+        }
+    };
+
+    const fetchUsername = async () => {
+        try {
+            const storedUsername = await AsyncStorage.getItem('username');
+            if (storedUsername) {
+                setUsername(storedUsername);
+            }
+        } catch (error) {
+            console.error('Error fetching username:', error);
+        }
+    };
+
     useEffect(() => {
-        const fetchUsername = async () => {
-            try {
-                const storedUsername = await AsyncStorage.getItem('username');
-                if (storedUsername) {
-                    setUsername(storedUsername);
-                }
-            } catch (error) {
-                console.error('Error fetching username:', error);
-            }
-        };
-
-        const fetchItems = async () => {
-            setLoading(true);
-            try {
-                const userEmail = await AsyncStorage.getItem('userEmail');
-                const response = await fetch(`https://gunners-7544551f4514.herokuapp.com/api/v1/model?email=${userEmail}`);
-                if (!response.ok) throw new Error(`Could not fetch items. Status: ${response.status}`);
-                const result = await response.json();
-                setItems(result);
-            } catch (error) {
-                console.error('Error fetching items:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchUsername();
-        fetchItems();
+        fetchItems(); // Call fetchItems when the component mounts
     }, []);
 
     useEffect(() => {
@@ -84,9 +76,7 @@ const Items = () => {
     }, [items]);
 
     const onRefresh = async () => {
-        setRefreshing(true);
-        await fetchItems(); // Calling the same fetchItems function for refresh
-        setRefreshing(false); // Call this after fetch is complete
+        await fetchItems(); // Call the fetchItems function for refresh
     };
 
     const addItemToBasketHandler = () => {
@@ -128,7 +118,9 @@ const Items = () => {
         <View style={{ flex: 1 }}>
             <ScrollView
                 style={{ flex: 1, backgroundColor: '#f8f9fa' }}
-                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+                refreshControl={
+                    <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+                }
             >
                 <Appbar.Header style={{ backgroundColor: 'white', elevation: 3 }}>
                     <Appbar.Content title={`${username} 😊`} titleStyle={{ color: "#333", fontSize: 16, fontWeight: 'bold' }} />
@@ -142,8 +134,8 @@ const Items = () => {
                         value={searchText}
                         onChangeText={setSearchText}
                         placeholder="Search your products ..."
-                        placeholderTextColor='#aaa'
-                        style={styles.searchInput}
+                        placeholderTextColor='black'
+                        style={[styles.searchInput, { color: 'black' }]}
                     />
                 </View>
                 <Text style={styles.featuredTitle}>Categories</Text>
@@ -209,14 +201,14 @@ const Items = () => {
                                                             keyboardType="numeric"
                                                             value={prices[item.id] ? prices[item.id].toString() : item.product_price.toString()}
                                                             onChangeText={(text) => setPrices(prev => ({ ...prev, [item.id]: text }))}
-                                                            style={[styles.input, { marginBottom: 3 }]}
+                                                            style={[styles.input, { marginBottom: 3 , color: 'black'}]}
                                                         />
                                                         <TextInput
                                                             placeholder="Quantity"
                                                             keyboardType="numeric"
                                                             value={quantities[item.id]?.toString() || ''}
                                                             onChangeText={(text) => setQuantities(prev => ({ ...prev, [item.id]: text ? parseInt(text, 10) : 0 }))}
-                                                            style={styles.input}
+                                                            style={[styles.input, { color: 'black' }]}
                                                         />
                                                     </View>
                                                     <Button
@@ -447,8 +439,8 @@ const styles = StyleSheet.create({
         color: 'red',
         fontWeight: 'bold',
         fontSize: 20,
-        textAlign:"center",
-        marginTop:40
+        textAlign: "center",
+        marginTop: 40
     },
     disabledItem: {
         opacity: 0.5, // visual indication that item is disabled
