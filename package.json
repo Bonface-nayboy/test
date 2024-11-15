@@ -21,7 +21,7 @@
     "axios": "^1.7.7",
     "crypto-browserify": "^3.12.1",
     "css-loader": "^7.1.2",
-    "expo": "~51.0.39",
+    "expo": "^52.0.7",
     "expo-print": "~13.0.1",
     "expo-status-bar": "~1.12.1",
     "is-arrayish": "^0.3.2",
