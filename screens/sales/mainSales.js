@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
         zIndex: 1, // Ensure it is above other components
     },
     bannerText: {
-        color: 'black',
+        color: 'red',
         fontWeight: 'bold',
         fontSize: 20,
     },
