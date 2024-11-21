@@ -24,7 +24,9 @@ const Sales = () => {
   }, [basketItems]);
 
   useEffect(() => {
-    setIsPostEnabled(selectedPaymentMethod === 'cash' || (selectedPaymentMethod === 'mpesa' && mobileNumber.length === 10));
+    // Enable the button if a payment method is selected
+    const isMpesaValid = selectedPaymentMethod === 'mpesa' && mobileNumber.length === 10;
+    setIsPostEnabled(selectedPaymentMethod !== '' && (selectedPaymentMethod === 'cash' || isMpesaValid));
   }, [selectedPaymentMethod, mobileNumber]);
 
   const paymentMethods = [
@@ -54,64 +56,61 @@ const Sales = () => {
     );
   };
 
+
   const handlePostSales = async () => {
+    if (!isPostEnabled) {
+      Toast.show({
+        text1: 'Invalid Input',
+        text2: 'Please select a valid payment method or enter a valid mobile number.',
+        type: 'error',
+      });
+      return;
+    }
+  
     if (items.length === 0) {
       Alert.alert('No items to post!');
       return;
     }
-
+  
     const salesData = items.map(item => ({
       productId: item.productId || item.id,
-      productName: item.productName || item.name || '',
+      productName: item.product_name || '',
       quantity: parseInt(item.quantity, 10) || 0,
       price: parseFloat(item.price),
     }));
-
+  
     try {
       const userEmail = await AsyncStorage.getItem('userEmail');
-      const response = await fetch(`https://gunners-7544551f4514.herokuapp.com/api/v1/sales/bulk?email=${userEmail}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(salesData),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Failed to post sales data: ${errorText}`);
-      }
-
-      const result = await response.json();
-      console.log('Fetched items:', result);
+      const response = await fetch(
+        `https://gunners-7544551f4514.herokuapp.com/api/v1/sales/bulk?email=${userEmail}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(salesData),
+        }
+      );
+  
+      if (!response.ok) throw new Error(await response.text());
+  
+      clearBasket();
       setModalVisible(false);
-
-      clearBasket(); // Clear the basket here after successful post
-
+      const totalPrice = calculateTotalPrice();
       Toast.show({
         text1: 'Sale Successful!',
         text2: 'Your items have been sold successfully.',
         type: 'success',
-        position: 'top',
-        visibilityTime: 3000,
-        autoHide: true,
       });
-
-      navigation.navigate('Items');
-      console.log('sales data:', salesData);
-
+      navigation.navigate('Receipt', { salesData, totalPrice });
     } catch (error) {
       Toast.show({
         text1: 'Failed To Post The Sale!',
         text2: 'Confirm The Method Of Payment.',
         type: 'error',
-        position: 'top',
-        visibilityTime: 3000,
-        autoHide: true,
       });
       console.error('error posting sale', error);
     }
   };
+  
 
   const calculateTotalPrice = () => {
     return items.reduce((total, item) => total + (parseFloat(item.price) * item.quantity), 0).toFixed(2);
@@ -232,6 +231,7 @@ const Sales = () => {
                     marginTop: 0,
                   },
                 ]}
+                
               >
                 <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Post Sales</Text>
               </Button>
@@ -303,6 +303,21 @@ const styles = StyleSheet.create({
   closeButton: {
     marginTop: 10,
   },
+  button: {
+    borderRadius: 25,
+    paddingVertical: 15,
+    paddingHorizontal: 40,
+  },
+  confirmButton: {
+    backgroundColor: '#006400',
+  },
+  cancelButton: {
+    borderWidth: 1,
+    borderColor: '#006400',
+  },
+  disabledItem: {
+    opacity: 0.5, // visual indication that item is disabled
+},
 });
 
 export default Sales;

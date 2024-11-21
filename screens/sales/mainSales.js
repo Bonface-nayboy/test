@@ -115,7 +115,7 @@ export default function MainSales() {
                 autoHide: true,
             });
         
-            navigation.navigate('Items');
+            navigation.navigate('Receipt', { salesData, totalPrice });
         } catch (error) {
             Toast.show({
                 text1: 'Failed To Post The Sale!',

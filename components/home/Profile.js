@@ -6,7 +6,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 
 const Profile = () => {
   const navigation = useNavigation();
-  const [username, setUsername] = useState('Bonface9');
+  const [username, setUsername] = useState('Bonface');
   const [email, setEmail] = useState('bonface@gmail.com');
   const [mobile, setMobile] = useState('+254-700000000');
 

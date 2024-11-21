@@ -127,8 +127,7 @@ export default function Purchases() {
             });
             // Alert.alert('Purchases have been successfully posted');
 
-            // Navigate to Receipt screen and pass purchase data and total price
-            // navigation.navigate('PurchaseReceipt', { purchaseData, totalPrice });
+            navigation.navigate('PurchaseReceipt', { purchaseData, totalPrice });
 
         } catch (error) {
             console.error('Error posting the purchases:', error);
@@ -145,101 +144,103 @@ export default function Purchases() {
 
     return (
         <View style={styles.container}>
-            <ScrollView>
-                {items.map((item) => (
-                    <Card key={item.id} style={styles.card}>
-                        <TouchableOpacity onPress={() => handleToggleItem(item)}>
-                            <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-                                {item.product_image && (
-                                    <Image
-                                        source={{ uri: item.product_image }}
-                                        style={styles.image}
-                                    />
+        <ScrollView>
+            {items.map((item) => (
+                <Card key={item.id} style={styles.card}>
+                    <TouchableOpacity onPress={() => handleToggleItem(item)}>
+                        <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+                            {item.product_image && (
+                                <Image
+                                    source={{ uri: item.product_image }}
+                                    style={styles.image}
+                                />
+                            )}
+                            <View style={{ marginLeft: 10, flexDirection: 'column', flex: 1 }}>
+                                <Text style={styles.productName}>{item.product_name}</Text>
+                                {item.stock > 0 ? (
+                                    <Text style={styles.quantity}>Available: {item.stock}</Text>
+                                ) : (
+                                    <Text style={styles.restockText}>Restock</Text> // Add this line for zero stock
                                 )}
-                                <View style={{ marginLeft: 10, flexDirection: 'column', flex: 1 }}>
-                                    <Text style={styles.productName}>{item.product_name}</Text>
-                                    {item.stock > 0 && (
-                                        <Text style={styles.quantity}>Available: {item.stock}</Text>
-                                    )}
-                                    {basket[item.id] && (
-                                        <View style={{ marginTop: 5 }}>
-                                            <TextInput
-                                                placeholder="Buy Price"
-                                                keyboardType="numeric"
-                                                value={buyPrices[item.id]}
-                                                onChangeText={(text) => setBuyPrices(prev => ({ ...prev, [item.id]: text }))}
-                                                style={[styles.input, { marginBottom: 10 }]}
-                                            />
-                                            <TextInput
-                                                placeholder="Quantity"
-                                                keyboardType="numeric"
-                                                value={quantities[item.id]?.toString() || ''}
-                                                onChangeText={(text) => setQuantities(prev => ({ ...prev, [item.id]: text ? parseInt(text, 10) : '' }))}
-                                                style={styles.input}
-                                            />
-                                        </View>
-                                    )}
-                                </View>
+                                {basket[item.id] && (
+                                    <View style={{ marginTop: 5 }}>
+                                        <TextInput
+                                            placeholder="Buy Price"
+                                            keyboardType="numeric"
+                                            value={buyPrices[item.id]}
+                                            onChangeText={(text) => setBuyPrices(prev => ({ ...prev, [item.id]: text }))}
+                                            style={[styles.input, { marginBottom: 10 }]}
+                                        />
+                                        <TextInput
+                                            placeholder="Quantity"
+                                            keyboardType="numeric"
+                                            value={quantities[item.id]?.toString() || ''}
+                                            onChangeText={(text) => setQuantities(prev => ({ ...prev, [item.id]: text ? parseInt(text, 10) : '' }))}
+                                            style={[styles.input, { marginBottom: 5 }]}
+                                        />
+                                    </View>
+                                )}
                             </View>
-                        </TouchableOpacity>
-                    </Card>
-                ))}
-            </ScrollView>
-            <Button onPress={() => setModalVisible(true)} mode="contained" style={{ backgroundColor: '#006400', paddingVertical: 10, paddingHorizontal: 30, borderRadius: 25 }}>
-                <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Confirm Purchases</Text>
-            </Button>
-            <Modal visible={modalVisible} animationType="slide" transparent={true}>
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.modalTitle}>Payment Method</Text>
-                        {paymentMethods.map((method) => (
-                            <TouchableOpacity
-                                key={method.id}
-                                onPress={() => setSelectedPaymentMethod(method.id)}
-                                style={[
-                                    styles.paymentMethod,
-                                    selectedPaymentMethod === method.id && styles.selectedPaymentMethod,
-                                ]}
-                            >
-                                <Icon name={method.icon} size={30} />
-                                <Text style={styles.methodText}>{method.name}</Text>
-                            </TouchableOpacity>
-                        ))}
-                        {selectedPaymentMethod === 'mpesa' && (
-                            <TextInput
-                                placeholder="Enter Mobile Number"
-                                value={mobileNumber}
-                                onChangeText={setMobileNumber}
-                                style={styles.input}
-                            />
-                        )}
-                        <Button
-                            onPress={handlePostPurchases}
-                            mode="contained"
-                            disabled={!isPostEnabled}
+                        </View>
+                    </TouchableOpacity>
+                </Card>
+            ))}
+        </ScrollView>
+        <Button onPress={() => setModalVisible(true)} mode="contained" style={{ backgroundColor: '#006400', paddingVertical: 10, paddingHorizontal: 30, borderRadius: 25 }}>
+            <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Confirm Purchases</Text>
+        </Button>
+        <Modal visible={modalVisible} animationType="slide" transparent={true}>
+            <View style={styles.modalContainer}>
+                <View style={styles.modalContent}>
+                    <Text style={styles.modalTitle}>Payment Method</Text>
+                    {paymentMethods.map((method) => (
+                        <TouchableOpacity
+                            key={method.id}
+                            onPress={() => setSelectedPaymentMethod(method.id)}
                             style={[
-                                styles.submitButton,
-                                isPostEnabled && {
-                                    backgroundColor: '#006400',
-                                    paddingVertical: 10,
-                                    paddingHorizontal: 10,
-                                    borderRadius: 25,
-                                    marginTop: 10,
-                                },
+                                styles.paymentMethod,
+                                selectedPaymentMethod === method.id && styles.selectedPaymentMethod,
                             ]}
                         >
-                            <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>
-                                Post Purchases
-                            </Text>
-                        </Button>
-                        <Button onPress={() => setModalVisible(false)} mode="text" style={styles.closeButton}>
-                            Close
-                        </Button>
-                    </View>
+                            <Icon name={method.icon} size={30} />
+                            <Text style={styles.methodText}>{method.name}</Text>
+                        </TouchableOpacity>
+                    ))}
+                    {selectedPaymentMethod === 'mpesa' && (
+                        <TextInput
+                            placeholder="Enter Mobile Number"
+                            value={mobileNumber}
+                            onChangeText={setMobileNumber}
+                            style={styles.input}
+                        />
+                    )}
+                    <Button
+                        onPress={handlePostPurchases}
+                        mode="contained"
+                        disabled={!isPostEnabled}
+                        style={[
+                            styles.submitButton,
+                            isPostEnabled && {
+                                backgroundColor: '#006400',
+                                paddingVertical: 10,
+                                paddingHorizontal: 10,
+                                borderRadius: 25,
+                                marginTop: 10,
+                            },
+                        ]}
+                    >
+                        <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>
+                            Post Purchases
+                        </Text>
+                    </Button>
+                    <Button onPress={() => setModalVisible(false)} mode="text" style={styles.closeButton}>
+                        Close
+                    </Button>
                 </View>
-            </Modal>
-        </View>
-    );
+            </View>
+        </Modal>
+    </View>
+);
 }
 
 const styles = StyleSheet.create({
@@ -248,18 +249,23 @@ const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: 'white',
     },
+    restockText: {
+        fontSize: 16,
+        color: 'red',  // Color for "Restock"
+        fontWeight: 'bold',
+        textAlign:'center',
+    },
     title: {
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: 'bold',
         textAlign: 'center',
         marginVertical: 0,
     },
     card: {
-        marginBottom: 12,
+        marginBottom: 15,
         borderRadius: 8,
-        height: 170,
         backgroundColor: 'white',
-        width: 330,
+        marginTop:0
     },
     image: {
         height: 100,
@@ -269,7 +275,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     productName: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: '600',
         marginTop: 10,
         marginLeft: 4,

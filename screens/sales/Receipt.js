@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import moment from 'moment';
 import * as Print from 'expo-print';
-import { Card } from 'react-native-paper';
+import { Button, Card } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 const Receipt = ({ route }) => {
@@ -92,7 +92,9 @@ const Receipt = ({ route }) => {
         <TouchableOpacity onPress={handlePrint} style={styles.button}>
           <Text style={styles.buttonText}>Print</Text>
         </TouchableOpacity>
-       
+        <Button mode='outlined' onPress={()=>navigation.navigate('Items') }
+                 style={{color:"purple", marginTop: 10,paddingVertical: 2, borderRadius: 25,alignItems: 'center',marginBottom: 10,width: 100,
+        marginLeft: 100}}>Home</Button>
       </Card>
     </View>
   );

@@ -108,10 +108,11 @@ const Category = () => {
 
             const result = await response.json();
             console.log('Fetched items:', result);
-           
+            const totalPrice = calculateTotalPrice();
+
             setModalVisible(false);
             Alert.alert('Sales Posted successfully !');
-            navigation.navigate('Items');
+             navigation.navigate('Receipt', { salesData, totalPrice });
         } catch (error) {
             Alert.alert(`Error posting sales: ${error.message}`);
             console.error('Error posting sale:', error);
