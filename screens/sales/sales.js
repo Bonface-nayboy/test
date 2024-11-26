@@ -141,7 +141,7 @@ const Sales = () => {
                   right: -10,
                 }}>
                   <Text style={{ fontSize: 12, color: 'white', textAlign: 'center', lineHeight: 12 }}>
-                    {item.quantity}
+                    {item.stock}
                   </Text>
                 </View>
               </View>

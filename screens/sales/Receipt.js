@@ -6,24 +6,24 @@ import { Button, Card } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 const Receipt = ({ route }) => {
-  const { salesData, totalPrice } = route.params; 
+  const { salesData, totalPrice } = route.params;
   const currentDate = moment().format('MMMM Do YYYY, h:mm:ss a');
-  const navigation=useNavigation();
+  const navigation = useNavigation();
 
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
       <View style={styles.itemRow}>
         <Text style={styles.itemName}>{item.productName}</Text>
-        <Text style={styles.itemQuantity}>{item.quantity} x </Text>
+        <Text style={styles.itemQuantity}>{item.quantity}</Text>
       </View>
-      <Text style={styles.itemPrice}>Ksh {parseFloat(item.price).toFixed(2)}</Text>
+      <Text style={styles.itemPrice}>Ksh {parseFloat(item.price).toLocaleString()}</Text>
     </View>
   );
 
   const handlePrint = async () => {
     try {
       const htmlContent = renderReceiptToHtml();
-      
+
       // Print the HTML content as a PDF
       await Print.printAsync({
         html: htmlContent,
@@ -36,32 +36,91 @@ const Receipt = ({ route }) => {
 
   const renderReceiptToHtml = () => {
     const itemsHtml = salesData.map(item => `
-      <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-        <span>${item.productName}</span>
-        <span>x ${item.quantity}</span>
-        <span>Ksh ${parseFloat(item.price).toFixed(2)}</span>
+      <div style="display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dotted #ccc;">
+        <span style="flex: 2; text-align: left;">${item.productName}</span>
+        <span style="flex: 1; text-align: center;">${item.quantity} x</span>
+        <span style="flex: 1; text-align: right;">${parseFloat(item.price).toLocaleString()}</span>
       </div>
     `).join('');
+
+    const headerHtml = `
+      <div style="display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 2px solid #000; font-weight: bold;">
+        <span style="flex: 2; text-align: left;">Product Name</span>
+        <span style="flex: 1; text-align: center;">Quantity</span>
+        <span style="flex: 1; text-align: right;">Price(Ksh)</span>
+      </div>
+    `;
 
     return `
       <html>
         <head>
           <title>Receipt</title>
           <style>
-            body { font-family: Arial, sans-serif; padding: 20px; }
-            h1 { text-align: center; }
-            .total { font-weight: bold; margin-top: 20px; }
+            body {
+              font-family: 'Roboto', Arial, sans-serif;
+              color: #333;
+              max-width: 320px;
+              margin: 0 auto;
+              padding: 20px;
+              border: 1px solid #ddd;
+              border-radius: 10px;
+              background-color: #fdfdfd;
+            }
+            h1 {
+              text-align: center;
+              font-size: 22px;
+              font-weight: bold;
+              margin: 0 0 10px;
+              color: #000;
+            }
+            .header {
+              text-align: center;
+              margin-bottom: 15px;
+            }
+            .header p {
+              margin: 0;
+              font-size: 14px;
+            }
+            .separator {
+              border-top: 1px solid #ddd;
+              margin: 10px 0;
+            }
+            .item {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 5px;
+            }
+            .item span {
+              font-size: 14px;
+            }
+            .total {
+              font-weight: bold;
+              font-size: 16px;
+              text-align: right;
+              margin-top: 15px;
+            }
+            .footer {
+              text-align: center;
+              margin-top: 20px;
+              font-size: 12px;
+              color: #777;
+            }
           </style>
         </head>
         <body>
           <h1>Gunner's Supermarket</h1>
-          <p>Thank you for shopping with us!</p>
-          <p>${currentDate}</p>
-          <hr/>
+          <div class="header">
+            <p>Thank you for shopping with us!</p>
+            <p>${currentDate}</p>
+          </div>
+          <div class="separator"></div>
+          ${headerHtml}
           <div>${itemsHtml}</div>
-          <hr/>
-          <div class="total">Total: Ksh ${parseFloat(totalPrice).toFixed(2)}</div>
-          <p>Visit us again!</p>
+          <div class="separator"></div>
+          <div class="total">Total: Ksh ${parseFloat(totalPrice).toLocaleString()}</div>
+          <div class="footer">
+            <p>Visit us again!</p>
+          </div>
         </body>
       </html>
     `;
@@ -71,7 +130,7 @@ const Receipt = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <Card style={styles.card}> 
+      <Card style={styles.card}>
         <Text style={styles.headerText}>Gunner's Supermarket </Text>
         <Text style={styles.subHeaderText}>Thank you for shopping with us!</Text>
         <Text style={styles.dateText}>{currentDate}</Text>
@@ -92,9 +151,11 @@ const Receipt = ({ route }) => {
         <TouchableOpacity onPress={handlePrint} style={styles.button}>
           <Text style={styles.buttonText}>Print</Text>
         </TouchableOpacity>
-        <Button mode='outlined' onPress={()=>navigation.navigate('Items') }
-                 style={{color:"purple", marginTop: 10,paddingVertical: 2, borderRadius: 25,alignItems: 'center',marginBottom: 10,width: 100,
-        marginLeft: 100}}>Home</Button>
+        <Button mode='outlined' onPress={() => navigation.navigate('Items')}
+          style={{
+            color: "purple", marginTop: 10, paddingVertical: 2, borderRadius: 25, alignItems: 'center', marginBottom: 10, width: 100,
+            marginLeft: 100
+          }}>Home</Button>
       </Card>
     </View>
   );
@@ -107,7 +168,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: 'white',
   },
-  card:{
+  card: {
     backgroundColor: 'white',
   },
   headerText: {
@@ -144,7 +205,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   itemName: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: '#333',
   },
@@ -153,7 +214,7 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   itemPrice: {
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: '600',
     textAlign: 'right',
     color: '#333',
@@ -186,9 +247,9 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 25,
     alignItems: 'center',
-    marginBottom:10,
-    width:200,
-    marginLeft:60
+    marginBottom: 10,
+    width: 200,
+    marginLeft: 60
   },
   buttonText: {
     color: 'white',

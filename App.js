@@ -8,6 +8,7 @@ import Favourites from './components/others/favourites';
 import { ThemeProvider } from './components/others/theme';
 import { BasketProvider } from './BasketContext';
 import Toast from 'react-native-toast-message';
+import UploadImagePage from './components/others/UploadImagePage';
 
 
 // Lazy load screens
@@ -222,6 +223,14 @@ const App = () => {
                   <Suspense fallback={<Text>Loading component, please wait...</Text>}
                   >
                     <CoolScreen />
+                  </Suspense>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="UploadImagePage" options={{ headerShown: false }}>
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}
+                  >
+                    <UploadImagePage />
                   </Suspense>
                 )}
               </Stack.Screen>

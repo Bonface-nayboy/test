@@ -1,8 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Alert, Text } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const CreateProduct = () => {
+  const navigation = useNavigation();
   const [productId, setProductId] = useState('');
   const [productName, setProductName] = useState('');
   const [productPrice, setProductPrice] = useState('');
@@ -10,11 +12,11 @@ const CreateProduct = () => {
   const [buyPrice, setBuyPrice] = useState('');
   const [category, setCategory] = useState('');
   const [stock, setStock] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
-    // Retrieve the user email from AsyncStorage
     const userEmail = await AsyncStorage.getItem('userEmail');
-    
+
     console.log('User Email fetched from storage:', userEmail);
     if (!userEmail || !productId || !productName || !productPrice || !productImage || !buyPrice || !category || !stock) {
       Alert.alert('Please fill in all fields');
@@ -30,14 +32,14 @@ const CreateProduct = () => {
       category,
       stock: parseInt(stock, 10),
     };
-
+    setLoading(true);
     try {
       const response = await fetch(`https://gunners-7544551f4514.herokuapp.com/api/v1/model?email=${encodeURIComponent(userEmail)}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify([newProduct]), // Send as an array
+        body: JSON.stringify([newProduct]),
       });
 
       if (!response.ok) {
@@ -49,7 +51,6 @@ const CreateProduct = () => {
       console.log('Product created successfully:', result);
       Alert.alert('Product created successfully!');
 
-      // Clear form fields after submission
       setProductId('');
       setProductName('');
       setProductPrice('');
@@ -60,6 +61,8 @@ const CreateProduct = () => {
     } catch (error) {
       console.error('Error creating product:', error);
       Alert.alert('Error creating product:', error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -110,7 +113,24 @@ const CreateProduct = () => {
         keyboardType="numeric"
         onChangeText={setStock}
       />
-      <Button title="Create Product" onPress={handleSubmit} />
+      <View style={styles.buttonContainer}>
+        <Button 
+          title="Upload Image" 
+          onPress={() => navigation.navigate("UploadImagePage")} 
+          color="black" 
+          style={{
+            backgroundColor:"white"
+          }}
+        />
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button 
+          title={loading ? "Creating..." : "Create Product"} 
+          onPress={handleSubmit} 
+          disabled={loading} 
+          color="#6200EE" 
+        />
+      </View>
     </View>
   );
 };
@@ -119,6 +139,9 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     backgroundColor: '#fff',
+  },
+  buttonContainer: {
+    marginVertical: 5, // Adds space between the buttons
   },
   input: {
     height: 40,
