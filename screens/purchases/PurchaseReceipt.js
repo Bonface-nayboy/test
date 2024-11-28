@@ -14,7 +14,7 @@ const PurchaseReceipt = ({ route }) => {
         <View style={styles.itemContainer}>
             <View style={styles.itemRow}>
                 <Text style={styles.itemName}>{item.productName}</Text>
-                <Text style={styles.itemQuantity}>{item.quantity}</Text>
+                <Text style={styles.itemQuantity}>{item.quantity} x</Text>
             </View>
             <Text style={styles.itemPrice}>Ksh {parseFloat(item.buyPrice).toLocaleString()}</Text>
         </View>
