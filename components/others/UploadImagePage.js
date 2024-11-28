@@ -58,7 +58,7 @@ const UploadImagePage = () => {
   
     try {
       const response = await axios.post(
-        'https://gunners-7544551f4514.herokuapp.com/api/v1/model',
+        'https://gunners-7544551f4514.herokuapp.com/api/v1/uploads',
         formData // No 'Content-Type' header specified here
       );
       setUploadResponse('Upload Successful!');
