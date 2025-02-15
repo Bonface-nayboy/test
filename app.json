@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "test",
-    "slug": "test",
+    "name": "Rees PoS App",
+    "slug": "rees-pos-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,15 +18,17 @@
       }
     },
     "android": {
+      "newArchEnabled": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
         "CAMERA",
-        "WRITE_EXTERNAL_STORAGE"
+        "WRITE_EXTERNAL_STORAGE",
+        "READ_EXTERNAL_STORAGE"
       ],
-      "package": "com.bonnieway.test"
+      "package": "com.bonnieway.becommerce"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -35,6 +37,7 @@
       "eas": {
         "projectId": "5c6d2886-b00c-46f6-bd35-b635e683b525"
       }
-    }
+    },
+    "scheme": "reesposapp"
   }
 }

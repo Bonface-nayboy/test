@@ -8,7 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from "react-native-toast-message";
 
 const Register = () => {
-    const [username, setUsername] = useState(''); 
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -44,8 +44,8 @@ const Register = () => {
         }
 
         try {
-            // const response = await fetch('http://192.168.100.45:8080/api/v1/Register', {
-                const response = await fetch('https://gunners-7544551f4514.herokuapp.com/api/v1/Register', {
+            const response = await fetch('http://192.168.100.45:8080/api/v1/Register', {
+                // const response = await fetch('https://gunners-7544551f4514.herokuapp.com/api/v1/Register' , {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -58,7 +58,6 @@ const Register = () => {
             }
 
             const result = await response.json();
-            console.log('Account created successfully:', result);
 
             await AsyncStorage.setItem('userCredentials', JSON.stringify({ username, email, password }));
 
@@ -72,19 +71,18 @@ const Register = () => {
                 text2: `Welcome, ${username}! 👩‍💼`
             });
 
-            Alert.alert('Account created successfully');
-            navigation.navigate('Login');
+            // Alert.alert('Account created successfully');
+            navigation.navigate('subbranch');
         } catch (error) {
-            console.error('Error in registering the user', error);
             Toast.show({
                 type: 'error',
                 text1: 'Failed to create an account!',
                 text2: 'Poor connection, please try again.'
             });
-            Alert.alert('Account created successfully');
+           
         }
     };
-    
+
 
     return (
         <View style={styles.container}>
@@ -152,7 +150,7 @@ const Register = () => {
                     borderRadius: 25,
                     marginTop: 10,
                 }}
-                onPress={handleRegister}>
+                    onPress={handleRegister}>
                     <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Register</Text>
                 </Button>
 
@@ -170,67 +168,67 @@ const Register = () => {
 };
 
 const styles = StyleSheet.create({
-  
-container: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: 'white',
 
-},
-text: {
-    textAlign: 'center',
-    color: 'green',
-    fontSize: 20,
-    fontWeight:'bold'
-},
-text1: {
-    textAlign: 'center',
-    color: 'black',
-    fontSize: 20,
-    marginTop:20,
-    fontWeight:'bold'
-},
-text2: {
-    textAlign: 'center',
-    color: 'black',
-    fontSize: 10,
-    marginBottom: 10,
-    marginTop: 10,
-},
-card: {
-    backgroundColor: 'white',
-    height: 'auto',
-    width: 320,
-    padding: 15,
-    marginTop: 50
-},
-inputContainer: {
-    marginTop: 2
-},
-button: {
-    width: 250,
-    backgroundColor: 'green',
-    marginLeft: 0,
-    height: 50,
-    marginTop: 10
-},
-container2: {
-    flexDirection: "row",
-    justifyContent: "center",
-    width: 200
-},
-button1: {
-    color: 'green',
-    fontSize: 20,
-},
-input: {
-    width: 'auto',
-    fontSize: 16,
-    color: 'black',
-    backgroundColor: "white",
-    marginLeft: 0
+    container: {
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: 'white',
 
-},
+    },
+    text: {
+        textAlign: 'center',
+        color: 'green',
+        fontSize: 20,
+        fontWeight: 'bold'
+    },
+    text1: {
+        textAlign: 'center',
+        color: 'black',
+        fontSize: 20,
+        marginTop: 20,
+        fontWeight: 'bold'
+    },
+    text2: {
+        textAlign: 'center',
+        color: 'black',
+        fontSize: 10,
+        marginBottom: 10,
+        marginTop: 10,
+    },
+    card: {
+        backgroundColor: 'white',
+        height: 'auto',
+        width: 320,
+        padding: 15,
+        marginTop: 50
+    },
+    inputContainer: {
+        marginTop: 2
+    },
+    button: {
+        width: 250,
+        backgroundColor: 'green',
+        marginLeft: 0,
+        height: 50,
+        marginTop: 10
+    },
+    container2: {
+        flexDirection: "row",
+        justifyContent: "center",
+        width: 200
+    },
+    button1: {
+        color: 'green',
+        fontSize: 20,
+    },
+    input: {
+        width: 'auto',
+        fontSize: 16,
+        color: 'black',
+        backgroundColor: "white",
+        marginLeft: 0
+
+    },
 
 });
 

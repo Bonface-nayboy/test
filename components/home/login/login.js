@@ -1,9 +1,9 @@
+import NetInfo from "@react-native-community/netinfo";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Image, TouchableOpacity, StyleSheet, View, Alert } from "react-native";
 import { Avatar, Button, Card, Text, TextInput } from "react-native-paper";
-// import Toast from "react-native-toast-message";
 import Icon from "react-native-vector-icons/FontAwesome";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from "react-native-toast-message";
@@ -21,61 +21,84 @@ const Login = () => {
 
 
     const handleLogin = async () => {
-        try {
-            const response = await fetch('https://gunners-7544551f4514.herokuapp.com/api/v1/Login/authenticate', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password }),
+        if (!username || !password) {
+            Toast.show({
+                text1: 'Missing Fields',
+                text2: 'Please fill in both username and password.',
+                type: 'error',
             });
+            return;
+        }
+
+        try {
+
+            const networkState = await NetInfo.fetch();
+            if (!networkState.isConnected) {
+                Toast.show({
+                    text1: 'No Network Connection',
+                    text2: 'Please check your internet connection and try again.',
+                    type: 'error',
+                });
+                return;
+            }
+
+
+            const response = await fetch('http://192.168.100.45:8080/api/v1/Login/authenticate'
+                // 'https://gunners-7544551f4514.herokuapp.com/api/v1/Login/authenticate'
+                , {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password }),
+                });
 
             const result = await response.json();
-            console.log('Login response:', result);
 
-            // Check if the login was successful
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Login failed');
+            }
+
             if (result.success) {
-                const { id, email, username } = result.user; // Destructure to get user details
+                const { id, email, username } = result.user;
                 await AsyncStorage.setItem('userCredentials', JSON.stringify(result.user));
                 await AsyncStorage.setItem('username', username);
-                await AsyncStorage.setItem('userEmail', email); // When logging in, store the correct email
+                await AsyncStorage.setItem('userEmail', email);
 
-                // Log the stored email
+
                 const storedEmail = await AsyncStorage.getItem('userEmail');
-                console.log('Stored email after login:', storedEmail);
 
-                // Clear input fields
-                setUsername('');
-                setPassword('');
+
 
                 Toast.show({
                     type: 'success',
-                    text1: 'Login Successfully',
+                    text1: 'Login Successful',
                     text2: `Welcome back, ${username}! 👋`,
-                    position: 'top',
-                    visibilityTime: 3000,
-                    autoHide: true,
                 });
-               
+
+
                 navigation.navigate('Items');
             } else {
-                Alert.alert('Login Failed', 'Username or password is incorrect!');
+
+                Toast.show({
+                    type: 'error',
+                    text1: 'Login Failed',
+                    text2: 'Invalid username or password.',
+                    position: 'top',
+                    visibilityTime: 4000,
+                    autoHide: true,
+                    topOffset: 50,
+                    bottomOffset: 40,
+                    onPress: () => console.log('Toast pressed!'),
+                });
             }
         } catch (error) {
-            console.error('Error Logging in:', error);
             Toast.show({
-                text1: 'Login Failed!',
-                text2: 'Check if your credentials are correct.',
+                text1: 'Error',
+                text2: error.message || 'Something went wrong. Please try again.',
                 type: 'error',
-                position: 'top',
-                visibilityTime: 3000,
-                autoHide: true,
-              });
+            });
         }
     };
-
-
-
     return (
         <View style={styles.container}>
 
@@ -120,7 +143,7 @@ const Login = () => {
                                 height: 10,
                                 color: 'black',
                                 backgroundColor: 'white',
-                                padding: 10, // Add padding for text visibility
+                                padding: 10,
                                 fontSize: 16,
                             }}
                         />
@@ -152,7 +175,7 @@ const Login = () => {
                                 height: 10,
                                 color: 'black',
                                 backgroundColor: 'white',
-                                padding: 10, // Add padding for text visibility
+                                padding: 10,
                                 fontSize: 16,
                             }}
                         />
@@ -168,8 +191,6 @@ const Login = () => {
 
 
                 </View>
-
-
 
                 <Button style={styles.Button}
                     onPress={handleLogin}
@@ -199,7 +220,7 @@ const Login = () => {
                 }}>
                     <Text style={styles.text4}>Create an account 👉</Text>
                     <Button
-                        onPress={() => navigation.navigate('Register')}
+                        onPress={() => navigation.navigate('mainbranch')}
                     >
                         <Text style={styles.text3}>Register</Text>
                     </Button>

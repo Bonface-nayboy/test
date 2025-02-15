@@ -9,6 +9,8 @@ import { ThemeProvider } from './components/others/theme';
 import { BasketProvider } from './BasketContext';
 import Toast from 'react-native-toast-message';
 import UploadImagePage from './components/others/UploadImagePage';
+import Mainbranch from './components/branch/mainbranch';
+import SubBranch from './components/branch/sub-Branch';
 
 
 // Lazy load screens
@@ -43,7 +45,7 @@ const RootScreen = ({ navigation }) => {
       <View style={styles.whiteBackground} />
       <View style={styles.greenBackground} />
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Gunners')}>
-        <Text style={styles.buttonText}>GUNN<Text style={styles.redE}>E</Text>RS📌</Text>
+        <Text style={styles.buttonText}>REES<Text style={styles.redE}> PoS</Text> APP</Text>
       </TouchableOpacity>
     </View>
   );
@@ -234,6 +236,24 @@ const App = () => {
                   </Suspense>
                 )}
               </Stack.Screen>
+
+              <Stack.Screen name="mainbranch" options={{ headerShown: true }}>
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}
+                  >
+                    <Mainbranch/>
+                  </Suspense>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="subbranch" options={{ headerShown: true }}>
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}
+                  >
+                    <SubBranch/>
+                  </Suspense>
+                )}
+              </Stack.Screen>
+
             </Stack.Navigator>
             <Toast />
           </NavigationContainer>

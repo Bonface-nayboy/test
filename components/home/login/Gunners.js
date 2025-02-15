@@ -1,15 +1,39 @@
+import NetInfo from "@react-native-community/netinfo";
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
-import { Image, StyleSheet, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Alert, Image, StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { toast } from "react-toastify";
 
 
 const Gunners = () => {
     const navigation=useNavigation();
+    const [isConnected,setIsConnected]=useState(true);
 
+    useEffect(()=>{
+        const unsubscribe=NetInfo.addEventListener((state)=>{
+            setIsConnected(state.isConnected);
+        })
+        return()=> unsubscribe();
+    },[]);
+    
+    const handleNavigate= () =>{
+        if(isConnected){
+            navigation.navigate("Login")
+        }
+       else{
+        Alert.alert("No Internet Connection", "Please check your internet connection and try again.");
+       }
+    }
     return (
         <View style={styles.container} >
+             {!isConnected && (
+                <View style={styles.noConnectionBar}>
+                    <Text style={styles.noConnectionText}>No Internet Connection</Text>
+                </View>
+            )}
+
                <Text style={{
                 marginTop:50,
                 textAlign:'center',
@@ -31,7 +55,7 @@ const Gunners = () => {
             <View>
                 <Button
                     style={styles.Button}
-                    onPress={()=>navigation.navigate('Login')}
+                    onPress={handleNavigate}
                 >
                     <Icon
                         name="envelope"
@@ -105,6 +129,15 @@ const styles = StyleSheet.create({
         color: "white",
         textAlign: "center",
         fontWeight: 'bold',
+    }, noConnectionBar: {
+        backgroundColor: "red",
+        padding: 10,
+        textAlign: "center",
+    },
+    noConnectionText: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center",
     },
 })
 
