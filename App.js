@@ -12,6 +12,26 @@ import UploadImagePage from './components/others/UploadImagePage';
 import Mainbranch from './components/branch/mainbranch';
 import SubBranch from './components/branch/sub-Branch';
 
+import * as Updates from 'expo-updates';
+import { useEffect } from 'react';
+
+const checkForUpdates = async () => {
+  try {
+    const update = await Updates.checkForUpdateAsync();
+    if (update.isAvailable) {
+      await Updates.fetchUpdateAsync();
+      await Updates.reloadAsync(); // Restarts the app to apply update
+    }
+  } catch (error) {
+    console.error('Error fetching updates:', error);
+  }
+};
+
+useEffect(() => {
+  checkForUpdates();
+}, []);
+
+
 
 // Lazy load screens
 const ItemDetail = lazy(() => import('./components/others/staticitems'));
@@ -211,7 +231,7 @@ const App = () => {
                     <Receipt {...props} />
                   </Suspense>
                 )}
-              </Stack.Screen>  
+              </Stack.Screen>
 
               <Stack.Screen name="PurchaseReceipt">
                 {props => (
@@ -241,7 +261,7 @@ const App = () => {
                 {() => (
                   <Suspense fallback={<Text>Loading component, please wait...</Text>}
                   >
-                    <Mainbranch/>
+                    <Mainbranch />
                   </Suspense>
                 )}
               </Stack.Screen>
@@ -249,7 +269,7 @@ const App = () => {
                 {() => (
                   <Suspense fallback={<Text>Loading component, please wait...</Text>}
                   >
-                    <SubBranch/>
+                    <SubBranch />
                   </Suspense>
                 )}
               </Stack.Screen>

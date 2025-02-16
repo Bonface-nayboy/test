@@ -120,13 +120,13 @@ export default function SubBranch() {
 
     const confNext = () => {
         if (subBranches.length > 0) {
-            navigation.navigate("Items");
+            navigation.navigate("Login");
         } else {
             Alert.alert(
                 "Create Sub-Branch",
                 "Do you want to create a sub-branch?",
                 [
-                    { text: "No", onPress: () => navigation.navigate("Items") },
+                    { text: "No", onPress: () => navigation.navigate("Login") },
                     {
                         text: "Yes",
                         onPress: () => {
@@ -140,7 +140,7 @@ export default function SubBranch() {
     };
     return (
         <View style={styles.container}>
-            <Button mode="outlined" onPress={() => navigation.navigate('Items')} style={styles.skipButton}>
+            <Button mode="outlined" onPress={() => navigation.navigate('Login')} style={styles.skipButton}>
                 Skip
             </Button>
 
