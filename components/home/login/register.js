@@ -20,12 +20,11 @@ const Register = () => {
         setShowPassword(!showPassword);
     };
 
-    // Validate password
     const validatePassword = (password) => {
-        const minLength = 7; // Minimum length
-        const hasUpperCase = /[A-Z]/.test(password); // At least one uppercase letter
-        const hasNumber = /\d/.test(password); // At least one number
-        const hasSpecialChar = /[!@#$%^&*(),_+.?":{}|<>]/.test(password); // At least one special character
+        const minLength = 7; 
+        const hasUpperCase = /[A-Z]/.test(password); 
+        const hasNumber = /\d/.test(password); 
+        const hasSpecialChar = /[!@#$%^&*(),_+.?":{}|<>]/.test(password); 
         return (
             password.length >= minLength &&
             hasUpperCase &&
@@ -35,12 +34,12 @@ const Register = () => {
     };
 
     const handleRegister = async () => {
-        // Validate password before sending registration request
+       
         if (!validatePassword(password)) {
             setPasswordError('Password must be at least 7 characters long, include an uppercase letter, a number, and a special character.');
             return;
         } else {
-            setPasswordError(''); // Clear error message if password is valid
+            setPasswordError('');
         }
 
         try {
@@ -71,7 +70,6 @@ const Register = () => {
                 text2: `Welcome, ${username}! 👩‍💼`
             });
 
-            // Alert.alert('Account created successfully');
             navigation.navigate('subbranch');
         } catch (error) {
             Toast.show({

@@ -1,5 +1,4 @@
 import React, { Suspense, lazy } from 'react';
-// import * as Updates from 'expo-updates';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -13,15 +12,18 @@ import UploadImagePage from './components/others/UploadImagePage';
 import Mainbranch from './components/branch/mainbranch';
 import SubBranch from './components/branch/sub-Branch';
 
+
 // Lazy load screens
 const ItemDetail = lazy(() => import('./components/others/staticitems'));
 const CartScreen = lazy(() => import('./components/others/CartScreen'));
 const Register = lazy(() => import('./components/home/login/register'));
 const Login = lazy(() => import('./components/home/login/login'));
+// const MainScreen = lazy(() => import('./screens/MainScreen'));
 const ResetPassword = lazy(() => import('./components/home/login/resetpassword'));
 const Newcode = lazy(() => import('./components/home/login/Code'));
 const Newpass = lazy(() => import('./components/home/login/newpassword'));
 const Gunners = lazy(() => import('./components/home/login/Gunners'));
+// const Homepage = lazy(() => import('./screens/homepage'));
 const Mainmenu = lazy(() => import('./components/others/menu'));
 const Profile = lazy(() => import('./components/home/Profile'));
 const Products = lazy(() => import('./components/others/products'));
@@ -30,40 +32,24 @@ const Items = lazy(() => import('./screens/Items'));
 const Sales = lazy(() => import('./screens/sales/sales'));
 const Purchases = lazy(() => import('./screens/purchases/purchases'));
 const Receipt = lazy(() => import('./screens/sales/Receipt'));
+const CoolScreen = lazy(() => import('./screens/coolscreen'));
 const MainSales = lazy(() => import('./screens/sales/mainSales'));
 const PurchaseReceipt = lazy(() => import('./screens/purchases/PurchaseReceipt'));
 const Category = lazy(() => import('./components/others/category'));
 
 const Stack = createNativeStackNavigator();
 
-// const checkForUpdates = async () => {
-//   try {
-//     const update = await Updates.checkForUpdateAsync();
-//     if (update.isAvailable) {
-//       console.log("🔄 New update found! Fetching...");
-//       await Updates.fetchUpdateAsync();
-//       await Updates.reloadAsync();
-//     } else {
-//       console.log("✅ App is up to date!");
-//     }
-//   } catch (error) {
-//     console.error("❌ Error checking for updates:", error);
-//   }
-// };
-
-const RootScreen = ({ navigation }) => (
-  <View style={styles.rootContainer}>
-    <View style={styles.whiteBackground} />
-    <View style={styles.greenBackground} />
-    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Gunners')}>
-      <Text style={styles.buttonText}>REES<Text style={styles.redE}> PoS</Text> APP</Text>
-    </TouchableOpacity>
-    {/* Update Button */}
-    {/* <TouchableOpacity style={styles.updateButton} onPress={checkForUpdates}>
-      <Text style={styles.updateButtonText}>Check for Updates</Text>
-    </TouchableOpacity> */}
-  </View>
-);
+const RootScreen = ({ navigation }) => {
+  return (
+    <View style={styles.rootContainer}>
+      <View style={styles.whiteBackground} />
+      <View style={styles.greenBackground} />
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Gunners')}>
+        <Text style={styles.buttonText}>REES<Text style={styles.redE}> PoS</Text> APP</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 const App = () => {
   return (
@@ -73,42 +59,201 @@ const App = () => {
           <NavigationContainer>
             <Stack.Navigator initialRouteName="Root">
               <Stack.Screen name="Root" component={RootScreen} options={{ headerShown: false }} />
+              {/* <Stack.Screen name="Main" component={MainScreen} options={{ headerShown: false }} /> */}
               <Stack.Screen name="Home" component={HomeScreen} />
               <Stack.Screen name="Favourites" component={Favourites} />
-              { /* Lazy loaded components wrapped in Suspense */ }
-              {[
-                { name: "Detail", component: ItemDetail },
-                { name: "Cart", component: CartScreen },
-                { name: "Mainmenu", component: Mainmenu },
-                { name: "Register", component: Register },
-                { name: "Login", component: Login },
-                { name: "ResetPassword", component: ResetPassword },
-                { name: "Category", component: Category },
-                { name: "Code", component: Newcode },
-                { name: "newpassword", component: Newpass },
-                { name: "Profile", component: Profile },
-                { name: "Products", component: Products },
-                { name: "CreateProduct", component: CreateProduct },
-                { name: "Items", component: Items, options: { headerShown: false }},
-                { name: "Sales", component: Sales },
-                { name: "MainSales", component: MainSales },
-                { name: "Purchases", component: Purchases },
-                { name: "Receipt", component: Receipt },
-                { name: "PurchaseReceipt", component: PurchaseReceipt },
-                { name: "CoolScreen", component: CoolScreen, options: { headerShown: false }},
-                { name: "UploadImagePage", component: UploadImagePage, options: { headerShown: false }},
-                { name: "mainbranch", component: Mainbranch },
-                { name: "subbranch", component: SubBranch },
-              ].map(({ name, component, options }) => (
-                <Stack.Screen key={name} name={name} options={options}>
-                  {() => (
-                    <Suspense fallback={<Text>Loading component, please wait...</Text>}>
-                      {/* Pass all props to component */}
-                      {React.createElement(component)}
-                    </Suspense>
-                  )}
-                </Stack.Screen>
-              ))}
+              <Stack.Screen name="Detail">
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}>
+                    <ItemDetail />
+                  </Suspense>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="Cart">
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}
+                  >
+                    <CartScreen />
+                  </Suspense>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="Mainmenu">
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}
+                  >
+                    <Mainmenu />
+                  </Suspense>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="Register">
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}
+                  >
+                    <Register />
+                  </Suspense>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="Login">
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}
+                  >
+                    <Login />
+                  </Suspense>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="ResetPassword">
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}
+                  >
+                    <ResetPassword />
+                  </Suspense>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="Category">
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}
+                  >
+                    <Category />
+                  </Suspense>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="Code">
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}
+                  >
+                    <Newcode />
+                  </Suspense>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="newpassword">
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}
+                  >
+                    <Newpass />
+                  </Suspense>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="Gunners" options={{ headerShown: false }}>
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}
+                  >
+                    <Gunners />
+                  </Suspense>
+                )}
+              </Stack.Screen>
+              {/* <Stack.Screen name="homepage" options={{ headerShown: false }}>
+              {() => (
+                <Suspense fallback={<Text>Loading component, please wait...</Text>}
+>
+                  <Homepage />
+                </Suspense>
+              )}
+            </Stack.Screen> */}
+              <Stack.Screen name="Profile">
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}
+                  >
+                    <Profile />
+                  </Suspense>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="Products">
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}
+                  >
+                    <Products />
+                  </Suspense>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="CreateProduct">
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}
+                  >
+                    <CreateProduct />
+                  </Suspense>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="Items" options={{ headerShown: false }}>
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}
+                  >
+                    <Items />
+                  </Suspense>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="Sales">
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}
+                  >
+                    <Sales />
+                  </Suspense>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="MainSales">
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}
+                  >
+                    <MainSales />
+                  </Suspense>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="Purchases">
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}
+                  >
+                    <Purchases />
+                  </Suspense>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="Receipt">
+                {props => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}>
+                    <Receipt {...props} />
+                  </Suspense>
+                )}
+              </Stack.Screen>  
+
+              <Stack.Screen name="PurchaseReceipt">
+                {props => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}>
+                    <PurchaseReceipt {...props} />
+                  </Suspense>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="CoolScreen" options={{ headerShown: false }}>
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}
+                  >
+                    <CoolScreen />
+                  </Suspense>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="UploadImagePage" options={{ headerShown: false }}>
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}
+                  >
+                    <UploadImagePage />
+                  </Suspense>
+                )}
+              </Stack.Screen>
+
+              <Stack.Screen name="mainbranch" options={{ headerShown: true }}>
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}
+                  >
+                    <Mainbranch/>
+                  </Suspense>
+                )}
+              </Stack.Screen>
+              <Stack.Screen name="subbranch" options={{ headerShown: true }}>
+                {() => (
+                  <Suspense fallback={<Text>Loading component, please wait...</Text>}
+                  >
+                    <SubBranch/>
+                  </Suspense>
+                )}
+              </Stack.Screen>
+
             </Stack.Navigator>
             <Toast />
           </NavigationContainer>
@@ -117,6 +262,8 @@ const App = () => {
     </ThemeProvider>
   );
 };
+
+export default App;
 
 const styles = StyleSheet.create({
   rootContainer: {
@@ -154,17 +301,4 @@ const styles = StyleSheet.create({
   redE: {
     color: 'green',
   },
-  updateButton: {
-    marginTop: 20,
-    backgroundColor: '#007AFF',
-    padding: 10,
-    borderRadius: 8,
-  },
-  updateButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
 });
-
-export default App;
