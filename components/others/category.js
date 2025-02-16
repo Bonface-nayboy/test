@@ -33,7 +33,7 @@ const Category = () => {
     const fetchItems = async () => {
         try {
             const userEmail = await AsyncStorage.getItem('userEmail');
-            const response = await fetch(`hhttps://backend-rees-realme.onrender.com/api/v1/model?email=${userEmail}`);
+            const response = await fetch(`https://backend-rees-realme.onrender.com/api/v1/model?email=${userEmail}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
