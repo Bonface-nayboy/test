@@ -14,7 +14,7 @@ const Products = () => {
         const fetchProducts = async () => {
             try {
 
-                const response = await fetch('https://gunners-7544551f4514.herokuapp.com/api/v1/model');//http://192.168.100.45:8080/api/v1/model 10.0.2.2
+                const response = await fetch('https://backend-rees-realme.onrender.com/api/v1/model');//http://192.168.100.45:8080/api/v1/model 10.0.2.2
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }

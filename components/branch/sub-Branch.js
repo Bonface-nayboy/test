@@ -57,7 +57,7 @@ export default function SubBranch() {
                 return;
             }
             
-            axios.put(`http://192.168.100.45:8080/api/v1/subbranch/single/${branchId}`, {
+            axios.put(`https://backend-rees-realme.onrender.com/api/v1/subbranch/single/${branchId}`, {
                 name,
                 location
             })
@@ -74,7 +74,7 @@ export default function SubBranch() {
                 Alert.alert("Limit Reached", `You can only create up to ${MAX_BRANCHES} sub-branches.`);
                 return;
             }
-            axios.post("http://192.168.100.45:8080/api/v1/subbranch/single", branchData)
+            axios.post("https://backend-rees-realme.onrender.com/api/v1/subbranch/single", branchData)
                 .then(response => {
                     setSubBranches([...subBranches, response.data]);
                     setShowForm(false);
@@ -92,7 +92,7 @@ export default function SubBranch() {
             { text: "Cancel", style: "cancel" },
             {
                 text: "Delete", onPress: () => {
-                    axios.delete(`http://192.168.100.45:8080/api/v1/subbranch/single/${id}`)
+                    axios.delete(`https://backend-rees-realme.onrender.com/api/v1/subbranch/single/${id}`)
                         .then(() => {
                             setSubBranches(subBranches.filter(branch => branch.id !== id));  // Ensure you're using "id"
                         })

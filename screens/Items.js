@@ -42,7 +42,7 @@ const Items = () => {
         setLoading(true); // Set loading to true when fetching items
         try {
             const userEmail = await AsyncStorage.getItem('userEmail');
-            const response = await fetch(`https://gunners-7544551f4514.herokuapp.com/api/v1/model?email=${userEmail}`);
+            const response = await fetch(`https://backend-rees-realme.onrender.com/api/v1/model?email=${userEmail}`);
             if (!response.ok) throw new Error(`Could not fetch items. Status: ${response.status}`);
             const result = await response.json();
             setItems(result);

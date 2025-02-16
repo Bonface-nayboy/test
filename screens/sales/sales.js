@@ -82,7 +82,7 @@ const Sales = () => {
     try {
       const userEmail = await AsyncStorage.getItem('userEmail');
       const response = await fetch(
-        `https://gunners-7544551f4514.herokuapp.com/api/v1/sales/bulk?email=${userEmail}`,
+        `https://backend-rees-realme.onrender.com/api/v1/sales/bulk?email=${userEmail}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

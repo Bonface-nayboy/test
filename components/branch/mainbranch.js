@@ -33,7 +33,7 @@ export default function Mainbranch() {
   const handleSubmit = async () => {
     if (isFormValid) {
       try {
-        const response = await fetch('http://192.168.100.45:8080/api/v1/mainbranch/single', {
+        const response = await fetch('https://backend-rees-realme.onrender.com/api/v1/mainbranch/single', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
