@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Rees PoS App",
-    "slug": "rees-pos-app",
+    "slug": "test",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -26,6 +26,9 @@
       "permissions": [
         "CAMERA",
         "WRITE_EXTERNAL_STORAGE",
+        "READ_EXTERNAL_STORAGE",
+        "CAMERA",
+        "WRITE_EXTERNAL_STORAGE",
         "READ_EXTERNAL_STORAGE"
       ],
       "package": "com.bonnieway.becommerce"
@@ -38,6 +41,13 @@
         "projectId": "5c6d2886-b00c-46f6-bd35-b635e683b525"
       }
     },
-    "scheme": "reesposapp"
+    "scheme": "reesposapp",
+    "owner": "bonnieway",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/5c6d2886-b00c-46f6-bd35-b635e683b525"
+    }
   }
 }

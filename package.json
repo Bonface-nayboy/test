@@ -31,6 +31,7 @@
     "expo-image-picker": "~16.0.6",
     "expo-print": "~14.0.3",
     "expo-status-bar": "~2.0.1",
+    "expo-updates": "~0.26.18",
     "is-arrayish": "^0.3.2",
     "metro": "^0.81.0",
     "metro-config": "~0.80.4",
