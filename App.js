@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import * as Updates from 'expo-updates';
+// import * as Updates from 'expo-updates';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -36,20 +36,20 @@ const Category = lazy(() => import('./components/others/category'));
 
 const Stack = createNativeStackNavigator();
 
-const checkForUpdates = async () => {
-  try {
-    const update = await Updates.checkForUpdateAsync();
-    if (update.isAvailable) {
-      console.log("🔄 New update found! Fetching...");
-      await Updates.fetchUpdateAsync();
-      await Updates.reloadAsync();
-    } else {
-      console.log("✅ App is up to date!");
-    }
-  } catch (error) {
-    console.error("❌ Error checking for updates:", error);
-  }
-};
+// const checkForUpdates = async () => {
+//   try {
+//     const update = await Updates.checkForUpdateAsync();
+//     if (update.isAvailable) {
+//       console.log("🔄 New update found! Fetching...");
+//       await Updates.fetchUpdateAsync();
+//       await Updates.reloadAsync();
+//     } else {
+//       console.log("✅ App is up to date!");
+//     }
+//   } catch (error) {
+//     console.error("❌ Error checking for updates:", error);
+//   }
+// };
 
 const RootScreen = ({ navigation }) => (
   <View style={styles.rootContainer}>
@@ -59,9 +59,9 @@ const RootScreen = ({ navigation }) => (
       <Text style={styles.buttonText}>REES<Text style={styles.redE}> PoS</Text> APP</Text>
     </TouchableOpacity>
     {/* Update Button */}
-    <TouchableOpacity style={styles.updateButton} onPress={checkForUpdates}>
+    {/* <TouchableOpacity style={styles.updateButton} onPress={checkForUpdates}>
       <Text style={styles.updateButtonText}>Check for Updates</Text>
-    </TouchableOpacity>
+    </TouchableOpacity> */}
   </View>
 );
 
