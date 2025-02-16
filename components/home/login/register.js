@@ -79,7 +79,7 @@ const Register = () => {
                 text1: 'Failed to create an account!',
                 text2: 'Poor connection, please try again.'
             });
-           
+
         }
     };
 
@@ -100,10 +100,19 @@ const Register = () => {
                     <Text style={{ color: 'black', marginBottom: 5 }}>Email</Text>
                     <TextInput
                         value={email}
-                        onChangeText={setEmail}
+                        onChangeText={(text) => {
+                            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|net|org|edu|gov)$/;
+                            if (emailRegex.test(text)) {
+                                setEmail(text);
+                            } else {
+                                setEmail('');
+                                Alert.alert('Invalid Email', 'Please enter a valid email ending with .com, .net, .org, etc.');
+                            }
+                        }}
                         placeholder="Enter email"
                         style={styles.input}
                     />
+
                 </View>
 
                 <View style={{ marginVertical: 5 }}>
