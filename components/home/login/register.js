@@ -21,10 +21,10 @@ const Register = () => {
     };
 
     const validatePassword = (password) => {
-        const minLength = 7; 
-        const hasUpperCase = /[A-Z]/.test(password); 
-        const hasNumber = /\d/.test(password); 
-        const hasSpecialChar = /[!@#$%^&*(),_+.?":{}|<>]/.test(password); 
+        const minLength = 7;
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasNumber = /\d/.test(password);
+        const hasSpecialChar = /[!@#$%^&*(),_+.?":{}|<>]/.test(password);
         return (
             password.length >= minLength &&
             hasUpperCase &&
@@ -34,7 +34,7 @@ const Register = () => {
     };
 
     const handleRegister = async () => {
-       
+
         if (!validatePassword(password)) {
             setPasswordError('Password must be at least 7 characters long, include an uppercase letter, a number, and a special character.');
             return;
@@ -80,7 +80,7 @@ const Register = () => {
 
         }
     };
-
+    const [emailError, setEmailError] = useState('');
 
     return (
         <View style={styles.container}>
@@ -96,20 +96,27 @@ const Register = () => {
                         style={styles.input}
                     />
                     <Text style={{ color: 'black', marginBottom: 5 }}>Email</Text>
+
+
                     <TextInput
                         value={email}
                         onChangeText={(text) => {
-                            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|net|org|edu|gov)$/;
-                            if (emailRegex.test(text)) {
-                                setEmail(text);
-                            } else {
-                                setEmail('');
-                                Alert.alert('Invalid Email', 'Please enter a valid email ending with .com, .net, .org, etc.');
+                            setEmail(text);
+                            setEmailError('');
+                        }}
+                        onBlur={() => {
+                            if (email.trim() !== '') {
+                                const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|net|org|edu|gov)$/;
+                                if (!emailRegex.test(email)) {
+                                    setEmailError('Invalid Email! Please enter a valid email ending with .com, .net, .org, etc.');
+                                }
                             }
                         }}
                         placeholder="Enter email"
                         style={styles.input}
                     />
+                    {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+
 
                 </View>
 
